@@ -5,7 +5,7 @@ const DaysOfWeek = () => {
 	return (
 		<DaysOfWeekContainer>
 			{DAYS_OF_THE_WEEK.map((d) => (
-				<DayOfWeek key={d} words>
+				<DayOfWeek key={d}>
 					{d}
 				</DayOfWeek>
 			))}

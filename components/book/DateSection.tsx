@@ -12,14 +12,15 @@ import {
 
 const DateSectionContainer = tw(ListContainer)`w-full flex`;
 const DatesList = styled(ListContainer)`
+	touch-action: none;
 	${tw`flex-1 flex overflow-hidden border-none`}
-	${(props) =>
-		props.active ? tw`cursor-grabbing transform  scale-50` : tw`cursor-pointer`}
+	${(props: any) =>
+		props.active ? tw`cursor-grabbing` : tw`cursor-pointer`}
 `;
 
 const DateListItem = tw(
 	ListItem
-)`min-w-1/3 sm:min-w-1/5 md:min-w-1/7 lg:min-w-1/11`;
+)`min-w-1/3 sm:min-w-1/5 md:min-w-1/7 lg:min-w-1/11 select-none`;
 const CalendarButton = tw(ListItemButton)`w-1/4 sm:w-1/6 md:w-1/8 lg:w-1/12`;
 
 const DateSection = (props) => {
@@ -40,22 +41,21 @@ const DateSection = (props) => {
 	const [startScrollLeft, setStartScrollLeft] = useState(0);
 	const sliderEl = useRef(null);
 
-	const handleMouseLeave = () => {
+	const handlePointerLeave = (e) => {
 		setIsDown(false);
 	};
-	const handleMouseUp = (e) => {
+	const handlePointerUp = (e) => {
 		setIsDown(false);
-		console.log(e);
 	};
-	const handleMouseDown = (e) => {
+	const handlePointerDown = (e) => {
+		e.preventDefault();
 		setIsDown(true);
 		setStartX(e.pageX);
 		setStartScrollLeft(sliderEl.current.scrollLeft);
 	};
-	const handleMouseMove = (e) => {
+	const handlePointerMove = (e) => {
 		if (!isDown) return;
-		e.preventDefault();
-		const walk = e.pageX - startX;
+		const walk = e.pageX - startX; 
 		sliderEl.current.scrollLeft = startScrollLeft - walk;
 	};
 	useEffect(() => {
@@ -73,10 +73,10 @@ const DateSection = (props) => {
 			<DatesList
 				ref={sliderEl}
 				active={isDown ? 'true' : ''}
-				onMouseDown={handleMouseDown}
-				onMouseLeave={handleMouseLeave}
-				onMouseUp={handleMouseUp}
-				onMouseMove={handleMouseMove}>
+				onPointerDown={handlePointerDown}
+				onPointerLeave={handlePointerLeave}
+				onPointerUp={handlePointerUp}
+				onPointerMove={handlePointerMove}>
 				{new Array(differenceInCalendarDays(addMonths(today, 3), today) + 1)
 					.fill('')
 					.map((_, index) => {
@@ -86,8 +86,9 @@ const DateSection = (props) => {
 								<ListItemButton
 									blue={isSameDay(thisDate, date)}
 									onClick={(e) => {
-										const walk = e.pageX - startX;
-										if (walk) return;
+										e.preventDefault()
+										const walk = e.pageX - startX; 
+										if (Math.abs(walk) > 1) return;
 										setDate(thisDate);
 									}}>
 									{format(thisDate, 'd MMM')}

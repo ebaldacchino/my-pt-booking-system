@@ -4,7 +4,22 @@ import DaysOfWeek from './components/DaysOfWeek';
 import { isBefore, isAfter, addMonths, addDays } from 'date-fns';
 import Modal from '../../modal';
 import { Button } from '../../button';
-const Calendar = (props) => {
+const Calendar = (props: {
+	currentMonth;
+	date: Date;
+	dateObj: {
+		year: string
+		day: string
+		month: string
+	};
+	getDaysInMonth;
+	setDate;
+	startDay;
+	today;
+	toggleCalendar;
+	viewCalendar;
+	setViewCalendar;
+}) => { 
 	const {
 		currentMonth,
 		date,

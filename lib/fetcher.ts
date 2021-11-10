@@ -1,4 +1,4 @@
-module.exports = async (url, body) => { 
+export default async (url: string, body: object | void) => { 
 	const res = await fetch(url, {
 		method: body ? 'post' : 'get',
 		body: body ? JSON.stringify(body) : null,

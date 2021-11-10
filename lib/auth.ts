@@ -1,9 +1,10 @@
 import Iron from '@hapi/iron';
+import { NextApiRequest as Req, NextApiResponse as Res, NextPageContext as Context } from 'next';
 import { getTokenCookie, maxAge, setTokenCookie } from './auth-cookies';
 
 const { TOKEN_SECRET } = process.env;
 
-const setLoginSession = async (res, session) => {
+const setLoginSession = async (res: Res, session) => {
 	const createdAt = Date.now();
 	const user = { ...session, password: null };
 	const obj = { ...user, createdAt, maxAge };
@@ -14,7 +15,7 @@ const setLoginSession = async (res, session) => {
 	return user;
 };
 
-const getLoginSession = async (req) => {
+const getLoginSession = async (req: Req) => {
 	const token = getTokenCookie(req);
 	
 	if (!token) return;
@@ -29,7 +30,7 @@ const getLoginSession = async (req) => {
 	return session;
 };
 
-const authUserServerSideProps = async (context) => {
+const authUserServerSideProps = async (context: Context) => {
 	try {
 		const user = await getLoginSession(context.req);
 		if (user) return { props: user };

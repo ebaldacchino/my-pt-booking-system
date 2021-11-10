@@ -8,6 +8,15 @@ const CalendarHeader = ({
 	today,
 	viewCalendar,
 	setViewCalendar,
+}: {
+	date: Date,
+	dateObj: {
+		year: number,
+		month: number
+	},
+	today: Date,
+	viewCalendar: Date,
+	setViewCalendar: any
 }) => {
 	const disabledPrevArrow = isBefore(new Date(year, month, 0), today);
 	const disabledNextArrow = isAfter(new Date(year, month - 2, 0), today);

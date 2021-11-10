@@ -2,12 +2,25 @@ import React from 'react';
 import Link from 'next/link';
 import { Form, Input, Button, LinkButton, A, Err } from '../styles';
 
+interface FormData {
+	email: string;
+	password: string;
+	givenName: string;
+	familyName: string;
+}
+
 export default function AuthForm({
 	values,
 	handleChange,
 	handleSubmit,
 	errors,
 	signupPage,
+}: {
+	values: FormData;
+	handleChange: any;
+	handleSubmit: any;
+	errors: FormData;
+	signupPage: true | undefined;
 }) {
 	return (
 		<Form onSubmit={handleSubmit}>

@@ -1,3 +1,4 @@
+import type { NextApiRequest as Req, NextApiResponse as Res } from 'next';
 import nextConnect from 'next-connect';
 import connectDB from '../../../middleware/mongodb';
 import { validate_signup } from '../../../middleware/server-form-validation';
@@ -6,11 +7,11 @@ import { setLoginSession } from '../../../lib/auth';
 
 const handler = nextConnect();
 
-handler.post(async (req, res) => {
+handler.post(async (req: Req, res: Res) => {
 	try {
 		const errors = await validate_signup(req);
 		if (errors) return res.status(404).json(errors);
-		
+
 		const user = await createUser(req.body);
 		await setLoginSession(res, user._doc);
 

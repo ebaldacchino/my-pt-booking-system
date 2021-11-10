@@ -1,3 +1,4 @@
+import type { NextApiRequest as Req, NextApiResponse as Res } from 'next';
 import connectDB from '../../../middleware/mongodb';
 import nextConnect from 'next-connect';
 import { validate_login } from '../../../middleware/server-form-validation';
@@ -6,7 +7,7 @@ import { findUser, validatePassword } from '../../../lib/user';
 
 const handler = nextConnect();
 
-handler.post(async (req, res) => {
+handler.post(async (req: Req, res: Res) => {
 	try {
 		const errors = await validate_login(req);
 		if (errors) return res.status(401).json(errors);

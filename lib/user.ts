@@ -1,12 +1,12 @@
 import User from '../models/user';
 import bcrypt from 'bcryptjs';
 
-const genPassword = (password) => {
-	const salt = bcrypt.genSaltSync(10);
+const genPassword = (password: string): string => {
+	const salt: string = bcrypt.genSaltSync(10);
 	return bcrypt.hashSync(password, salt);
 };
 
-const validatePassword = (password, hashedPassword) => {
+const validatePassword = (password: string, hashedPassword: string): boolean => {
 	return bcrypt.compareSync(password, hashedPassword);
 };
 

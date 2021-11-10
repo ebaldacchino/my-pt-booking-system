@@ -16,7 +16,7 @@ const useCalendar = () => {
 	});
 	const [viewCalendar, setViewCalendar] = useState(false);
 	const [startDay, setStartDay] = useState(getStartDayOfMonth(date));
-
+	
 	const toggleCalendar = () => setViewCalendar(!viewCalendar && date);
 
 	useEffect(() => {

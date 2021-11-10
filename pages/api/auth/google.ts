@@ -1,3 +1,4 @@
+import type { NextApiRequest as Req, NextApiResponse as Res } from 'next';
 import nextConnect from 'next-connect';
 import fetcher from '../../../lib/fetcher';
 import {
@@ -35,10 +36,12 @@ const getTokens = async (code) => {
 	}
 };
 
-const getGoogleAccount = async (access_token, id_token) => {
+const getGoogleAccount = async (access_token: string, id_token: string) => {
 	try {
-		const url = `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`;
-		const headers = {
+		const url: string = `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`;
+		const headers: {
+			Authorization: string
+		} = {
 			Authorization: `Bearer ${id_token}`,
 		};
 		const { data } = await fetcher(url, null, headers);
@@ -48,7 +51,7 @@ const getGoogleAccount = async (access_token, id_token) => {
 	}
 };
 
-handler.get(async (req, res) => {
+handler.get(async (req: Req, res: Res) => {
 	try {
 		const { access_token, id_token } = await getTokens(req.query.code);
 

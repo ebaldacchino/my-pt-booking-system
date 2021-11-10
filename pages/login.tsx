@@ -32,6 +32,7 @@ const Login = () => {
 			setErrors(data);
 		}
 	};
+
 	return (
 		<Layout title='Login'>
 			<AuthForm {...{ handleChange, handleSubmit, values, errors }} />
