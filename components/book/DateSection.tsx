@@ -2,19 +2,14 @@ import { useState, useRef, useEffect } from 'react';
 import tw, { styled } from 'twin.macro';
 import { BiCalendarAlt } from 'react-icons/bi';
 import { ListContainer, ListItem, ListItemButton } from '../list-group';
-import {
-	format,
-	addDays,
-	isSameDay,
-	differenceInCalendarDays,
-	addMonths,
-} from 'date-fns';
+import { format, addDays, isSameDay, differenceInCalendarDays } from 'date-fns';
+import scheduleData from './mockDates';
 
 const DateSectionContainer = tw(ListContainer)`w-full flex`;
 const DatesList = styled(ListContainer)`
 	touch-action: none;
 	${tw`flex-1 flex overflow-hidden border-none`}
-	${(props: any) =>
+	${(props: { active: string }) =>
 		props.active ? tw`cursor-grabbing` : tw`cursor-pointer`}
 `;
 
@@ -29,6 +24,8 @@ const DateSection = (props) => {
 		date,
 		dateObj,
 		getDaysInMonth,
+		lastDay,
+		schedule,
 		setDate,
 		setViewCalendar,
 		startDay,
@@ -40,6 +37,8 @@ const DateSection = (props) => {
 	const [startX, setStartX] = useState(0);
 	const [startScrollLeft, setStartScrollLeft] = useState(0);
 	const sliderEl = useRef(null);
+ 
+	const daysFromToday = differenceInCalendarDays(lastDay, today);
 
 	const handlePointerLeave = (e) => {
 		setIsDown(false);
@@ -55,7 +54,7 @@ const DateSection = (props) => {
 	};
 	const handlePointerMove = (e) => {
 		if (!isDown) return;
-		const walk = e.pageX - startX; 
+		const walk = e.pageX - startX;
 		sliderEl.current.scrollLeft = startScrollLeft - walk;
 	};
 	useEffect(() => {
@@ -77,17 +76,22 @@ const DateSection = (props) => {
 				onPointerLeave={handlePointerLeave}
 				onPointerUp={handlePointerUp}
 				onPointerMove={handlePointerMove}>
-				{new Array(differenceInCalendarDays(addMonths(today, 3), today) + 1)
+				{new Array(daysFromToday)
+					// add days above
 					.fill('')
 					.map((_, index) => {
 						const thisDate = addDays(new Date(), index);
+						const hasAvailableSessions = schedule.find(({ date }) =>
+							isSameDay(date, thisDate)
+						);
 						return (
 							<DateListItem key={index}>
 								<ListItemButton
 									blue={isSameDay(thisDate, date)}
+									disabled={!hasAvailableSessions}
 									onClick={(e) => {
-										e.preventDefault()
-										const walk = e.pageX - startX; 
+										e.preventDefault();
+										const walk = e.pageX - startX;
 										if (Math.abs(walk) > 1) return;
 										setDate(thisDate);
 									}}>

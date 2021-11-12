@@ -1,30 +1,35 @@
 import Header from './components/Header';
 import { Body, Day, ButtonContainer, Frame } from './styles';
 import DaysOfWeek from './components/DaysOfWeek';
-import { isBefore, isAfter, addMonths, addDays } from 'date-fns';
+import { isSameDay } from 'date-fns';
 import Modal from '../../modal';
 import { Button } from '../../button';
+
 const Calendar = (props: {
 	currentMonth;
 	date: Date;
 	dateObj: {
-		year: string
-		day: string
-		month: string
+		year: string;
+		day: string;
+		month: string;
 	};
 	getDaysInMonth;
+	lastDay;
+	schedule;
 	setDate;
 	startDay;
 	today;
 	toggleCalendar;
 	viewCalendar;
 	setViewCalendar;
-}) => { 
+}) => {
 	const {
 		currentMonth,
 		date,
 		dateObj,
 		getDaysInMonth,
+		lastDay,
+		schedule,
 		setDate,
 		startDay,
 		today,
@@ -54,6 +59,9 @@ const Calendar = (props: {
 							const thisDate = new Date(year, month, d);
 							const thisDatesMonth = thisDate.getMonth();
 							const daysInMonth = getDaysInMonth(year, month);
+							const hasAvailableSessions = schedule.find(({ date }) =>
+								isSameDay(date, thisDate)
+							);
 							return (
 								<Day
 									key={index}
@@ -63,10 +71,7 @@ const Calendar = (props: {
 									isSelected={d === day && currentMonth === month}
 									isSameSelected={d === day && currentMonth !== month}
 									isMuted={d <= 0 || d > daysInMonth + 1}
-									disabled={
-										isBefore(addDays(thisDate, 1), today) ||
-										isAfter(thisDate, addMonths(today, 3))
-									}
+									disabled={!hasAvailableSessions}
 									onClick={() => {
 										setDate(thisDate);
 										toggleCalendar();
