@@ -6,22 +6,22 @@ import Modal from '../../modal';
 import { Button } from '../../button';
 
 const Calendar = (props: {
-	currentMonth;
+	currentMonth: number;
 	date: Date;
 	dateObj: {
-		year: string;
-		day: string;
-		month: string;
+		year: number;
+		day: number;
+		month: number;
 	};
-	getDaysInMonth;
-	lastDay;
-	schedule;
-	setDate;
-	startDay;
-	today;
-	toggleCalendar;
-	viewCalendar;
-	setViewCalendar;
+	getDaysInMonth: Function;
+	lastDay: Date;
+	schedule: [];
+	setDate: Function;
+	startDay: number;
+	today: Date;
+	toggleCalendar: Function;
+	viewCalendar: Date;
+	setViewCalendar: Function;
 }) => {
 	const {
 		currentMonth,
@@ -36,14 +36,13 @@ const Calendar = (props: {
 		toggleCalendar,
 		viewCalendar,
 		setViewCalendar,
-	} = props;
-	const { day, month, year } = dateObj;
+	} = props; 
+	const { day, month, year } = dateObj; 
 	return (
 		<Modal toggleModal={toggleCalendar}>
 			<Frame>
 				<Header
-					{...{
-						date,
+					{...{ 
 						dateObj,
 						today,
 						viewCalendar,
@@ -54,7 +53,7 @@ const Calendar = (props: {
 					<DaysOfWeek />
 					{Array(42)
 						.fill(null)
-						.map((_, index) => {
+						.map((_, index) => { 
 							const d = index - (startDay - 2);
 							const thisDate = new Date(year, month, d);
 							const thisDatesMonth = thisDate.getMonth();
