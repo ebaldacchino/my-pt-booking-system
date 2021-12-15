@@ -1,22 +1,6 @@
 import React from 'react';
-import tw, { styled } from 'twin.macro';
 import { SectionTitle as Title } from '../../../styles';
-
-const Section = styled.section`  
-	${tw`w-full p-4`}
-	${(props) =>
-		props.white
-			? tw`bg-white text-blue-700`
-			: props.teal
-			? tw`bg-cyan-100 text-blue-700`
-			: props.green
-			? tw`bg-green-100 text-blue-700`
-			: tw`bg-blue-500 text-white`}
-`;
-const Text = styled.p`
-	${tw`mb-2`}
-	${(props) => props.dark && tw`text-blue-900`}
-`;
+import { Section, Text } from './styles';
 
 export default function Services() {
 	return (

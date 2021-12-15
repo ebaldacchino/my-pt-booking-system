@@ -9,19 +9,15 @@ const Frame = styled.div`
 	${({ row }: any) => !row && tw`flex-col`}
 `;
 
-const Modal = ({
-	children,
-	frame,
-	toggleModal,
-	end,
-	row,
-}: {
+interface ModalProps {
 	children: any;
 	frame?: true | undefined;
-	toggleModal: Function;
+	toggleModal: () => void;
 	end?: true | undefined;
 	row?: true | undefined;
-}) => {
+}
+
+const Modal = ({ children, frame, toggleModal, end, row }: ModalProps) => {
 	const handleClosingModal = (e) => {
 		const { className } = e.target;
 		if (

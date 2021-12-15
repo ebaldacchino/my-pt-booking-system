@@ -1,10 +1,10 @@
 import type { Theme } from '@emotion/react';
 export interface PasswordEyeProps {
-	type: string;
+	type: 'text' | 'password';
 	handleShowPassword: () => void;
 }
 
-export interface FormFieldProps extends PasswordEyeProps {
+export interface FormFieldProps {
 	value: string;
 	label?: string;
 	placeHolder?: string;
@@ -12,6 +12,7 @@ export interface FormFieldProps extends PasswordEyeProps {
 	transparent?: boolean;
 	error?: string;
 	children: JSX.Element | JSX.Element[];
+	type?: string;
 	handleShowPassword?: () => void;
 }
 

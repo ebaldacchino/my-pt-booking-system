@@ -3,21 +3,18 @@ import { TextArea as TextAreaField } from './styles';
 
 interface Props {
 	name: string;
-	value: string;
-	type: string;
-	setValue: () => void;
+	value: string; 
+	setValue: (e: string) => void;
 }
 
 const TextArea = (props: Props) => {
-	const { name, value, type, setValue } = props;
+	const { name, value, setValue } = props;
 
 	return (
 		<FormField {...props}>
 			<TextAreaField
-				name={name}
-				value={value}
-				type={type || 'text'}
-				onChange={({ target: { value } }: {target: {value: string}}) => setValue(value)}
+				{...{ name, value }}
+				onChange={({ target: { value } }) => setValue(value)}
 			/>
 		</FormField>
 	);

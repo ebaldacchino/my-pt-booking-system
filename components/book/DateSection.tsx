@@ -37,7 +37,7 @@ const DateSection = (props: any) => {
 	const [isDown, setIsDown] = useState(false);
 	const [startX, setStartX] = useState(0);
 	const [startScrollLeft, setStartScrollLeft] = useState(0);
-	const sliderEl = useRef(null);
+	const sliderEl = useRef<HTMLUListElement>(null);
 
 	const daysFromToday = differenceInCalendarDays(lastDay, today);
 
@@ -51,22 +51,28 @@ const DateSection = (props: any) => {
 		e.preventDefault();
 		setIsDown(true);
 		setStartX(e.pageX);
-		setStartScrollLeft(sliderEl.current.scrollLeft);
+		if (null !== sliderEl.current) {
+			setStartScrollLeft(sliderEl.current.scrollLeft);
+		}
 	};
 	const handlePointerMove = (e: PointerEvent<HTMLUListElement>) => {
 		if (!isDown) return;
 		const walk = e.pageX - startX;
-		sliderEl.current.scrollLeft = startScrollLeft - walk;
+		if (null !== sliderEl.current) {
+			sliderEl.current.scrollLeft = startScrollLeft - walk;
+		}
 	};
 	useEffect(() => {
 		const daysFromToday = differenceInCalendarDays(date, today);
-		const dateButtonWidth =
-			sliderEl.current.children[0].getBoundingClientRect().width;
-		// sliderEl.current.scrollLeft = dateButtonWidth * daysFromToday;
-		sliderEl.current.scrollTo({
-			left: dateButtonWidth * daysFromToday,
-			behavior: 'smooth',
-		});
+		if (null !== sliderEl.current) {
+			const dateButtonWidth =
+				sliderEl.current.children[0].getBoundingClientRect().width; 
+		// sliderEl.current.scrollLeft = dateButtonWidth * daysFromToday; 
+			sliderEl.current.scrollTo({
+				left: dateButtonWidth * daysFromToday,
+				behavior: 'smooth',
+			});
+		}
 	}, [date]);
 	return (
 		<DateSectionContainer>
