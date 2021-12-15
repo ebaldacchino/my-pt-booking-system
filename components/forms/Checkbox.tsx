@@ -1,4 +1,5 @@
 import tw, { styled } from 'twin.macro';
+import { CheckboxProps } from './types';
 
 const CheckboxContainer = tw.div`flex items-center mt-2 mb-4`;
 const StyledCheckbox = styled.input`
@@ -17,15 +18,20 @@ const StyledCheckbox = styled.input`
 	}
 `;
 const CheckboxLabel = tw.label``;
-const Checkbox = ({ name, checked, children, disabled, setChecked }) => {
+
+const Checkbox = ({
+	name,
+	checked,
+	children,
+	disabled,
+	setChecked,
+}: CheckboxProps) => { 
 	return (
 		<CheckboxContainer>
 			<StyledCheckbox
 				onChange={() => setChecked(!checked)}
 				type='checkbox'
-				name={name}
-				disabled={disabled}
-				checked={checked}
+				{...{ name, disabled, checked }}
 			/>
 			<CheckboxLabel htmlFor={name}>{children}</CheckboxLabel>
 		</CheckboxContainer>

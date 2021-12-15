@@ -1,7 +1,7 @@
 import React from 'react';
 import tw from 'twin.macro';
 import Layout from '../components/Layout';
-import { Button, unstyledButton } from '../components/button';
+import { Button, unstyledButton } from '../styles/button';
 import { BiArrowBack } from 'react-icons/bi';
 import { Input } from '../components/forms';
 
@@ -54,24 +54,24 @@ export default function MedicalHistory() {
 		.join('')
 		.replace('?', '');
 
-	const nextCondition = (value) =>
+	const nextCondition = (value: number) =>
 		setCurrentCondition(
 			(prevCondition) =>
 				prevCondition + (currentCondition === 11 && !value ? 2 : 1)
 		);
 
-	const updateState = (value) =>
+	const updateState = (value: number) =>
 		setState((prevState) => ({
 			...prevState,
 			[name || 'otherConditions']: value,
 		}));
 
-	const handleClick = (value) => {
+	const handleClick = (value: number) => {
 		updateState(value);
 		nextCondition(value);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = (e: React.SyntheticEvent) => {
 		// e.preventDefault();
 		console.log('submitting');
 	};
@@ -81,7 +81,10 @@ export default function MedicalHistory() {
 	React.useEffect(() => {}, []);
 
 	return (
-		<Layout>
+		<Layout
+			user=''
+			title='Medical History'
+			description="Please reveal all the embarassing info you don't want anybody to see">
 			<Form onSubmit={handleSubmit}>
 				{currentCondition !== -1 && (
 					<BackButtonContainer>

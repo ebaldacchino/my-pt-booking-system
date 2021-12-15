@@ -1,12 +1,13 @@
 import React from 'react';
 import tw from 'twin.macro';
 import Link from 'next/link';
+import type { NavbarProps } from './types';
 
 const NavbarContainer = tw.header`h-20 flex justify-between items-center bg-blue-700 text-white p-2`;
 const Navlinks = tw.nav`flex gap-2`;
 const Logo = tw.a`text-5xl font-extrabold font-title`;
 
-export default function Navbar({ user }) {
+export default function Navbar({ user }: NavbarProps) {
 	const links = [
 		{ title: 'Home', url: '/' },
 		{ title: 'Book', url: '/book' },

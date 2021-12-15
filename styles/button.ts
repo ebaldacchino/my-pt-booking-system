@@ -8,7 +8,17 @@ const unstyledButton = tw.button`${buttonBrowserDefaults}`;
 const defaultButtonStyles = () =>
 	tw`flex text-center items-center justify-center px-3 py-1.5 border rounded cursor-pointer disabled:cursor-default ${buttonBrowserDefaults}`;
 
-const handleCustomButtonStyles = ({ secondary, danger, success, textOnly }: any) =>
+const handleCustomButtonStyles = ({
+	secondary,
+	danger,
+	success,
+	textOnly,
+}: {
+	secondary?: any;
+	danger?: any;
+	success?: any;
+	textOnly?: any;
+}) =>
 	secondary
 		? tw`text-blue-500 bg-gray-50 hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-300 active:border-gray-300`
 		: danger
@@ -22,6 +32,11 @@ const handleCustomButtonStyles = ({ secondary, danger, success, textOnly }: any)
 const handleNotTextOnly = ({ textOnly }: any) =>
 	!textOnly && tw`focus:scale-99 focus:hover:shadow-sm active:shadow-md`;
 
+const buttonStyles = () => [
+	defaultButtonStyles,
+	handleCustomButtonStyles,
+	handleNotTextOnly,
+];
 const Button = styled.button`
 	${defaultButtonStyles}
 	${handleCustomButtonStyles}

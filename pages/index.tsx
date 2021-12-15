@@ -1,18 +1,29 @@
+import type { GetServerSideProps } from 'next';
 import Hero from '../components/home/Hero';
-import Services from '../components/home/Services'; 
+import Services from '../components/home/Services';
 import Layout from '../components/Layout';
 import { authUserServerSideProps } from '../lib/auth';
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 	const data = await authUserServerSideProps(context);
+	if (data.props) {
+		return {
+			props: {
+				givenName: data.props.givenName,
+			},
+		};
+	}
 	return { props: { ...data } };
 };
 
-export default function Home({ props }) {
+interface Props {
+	givenName: string | undefined;
+}
+export default function Home({ givenName }: Props) {
 	return (
-		<Layout user={props?.givenName}>
+		<Layout user={givenName} title='Welcome' description='The best of the best'>
 			<Hero />
-			<Services />  
+			<Services />
 		</Layout>
 	);
 }

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import type { PointerEvent } from 'react';
 import tw, { styled } from 'twin.macro';
 import { BiCalendarAlt } from 'react-icons/bi';
 import { ListContainer, ListItem, ListItemButton } from '../list-group';
@@ -18,7 +19,7 @@ const DateListItem = tw(
 )`min-w-1/3 sm:min-w-1/5 md:min-w-1/7 lg:min-w-1/11 select-none`;
 const CalendarButton = tw(ListItemButton)`w-1/4 sm:w-1/6 md:w-1/8 lg:w-1/12`;
 
-const DateSection = (props) => {
+const DateSection = (props: any) => {
 	const {
 		currentMonth,
 		date,
@@ -37,22 +38,22 @@ const DateSection = (props) => {
 	const [startX, setStartX] = useState(0);
 	const [startScrollLeft, setStartScrollLeft] = useState(0);
 	const sliderEl = useRef(null);
- 
+
 	const daysFromToday = differenceInCalendarDays(lastDay, today);
 
-	const handlePointerLeave = (e) => {
+	const handlePointerLeave = (e: PointerEvent<HTMLUListElement>) => {
 		setIsDown(false);
 	};
-	const handlePointerUp = (e) => {
+	const handlePointerUp = (e: PointerEvent<HTMLUListElement>) => {
 		setIsDown(false);
 	};
-	const handlePointerDown = (e) => {
+	const handlePointerDown = (e: PointerEvent<HTMLUListElement>) => {
 		e.preventDefault();
 		setIsDown(true);
 		setStartX(e.pageX);
 		setStartScrollLeft(sliderEl.current.scrollLeft);
 	};
-	const handlePointerMove = (e) => {
+	const handlePointerMove = (e: PointerEvent<HTMLUListElement>) => {
 		if (!isDown) return;
 		const walk = e.pageX - startX;
 		sliderEl.current.scrollLeft = startScrollLeft - walk;
@@ -81,8 +82,8 @@ const DateSection = (props) => {
 					.fill('')
 					.map((_, index) => {
 						const thisDate = addDays(new Date(), index);
-						const hasAvailableSessions = schedule.find(({ date }) =>
-							isSameDay(date, thisDate)
+						const hasAvailableSessions = schedule.find(
+							({ date }: { date: Date }) => isSameDay(date, thisDate)
 						);
 						return (
 							<DateListItem key={index}>

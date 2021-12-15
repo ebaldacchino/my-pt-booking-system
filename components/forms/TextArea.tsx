@@ -1,7 +1,14 @@
 import FormField from './form-fields';
 import { TextArea as TextAreaField } from './styles';
 
-const TextArea = (props) => {
+interface Props {
+	name: string;
+	value: string;
+	type: string;
+	setValue: () => void;
+}
+
+const TextArea = (props: Props) => {
 	const { name, value, type, setValue } = props;
 
 	return (
@@ -10,7 +17,7 @@ const TextArea = (props) => {
 				name={name}
 				value={value}
 				type={type || 'text'}
-				onChange={(e) => setValue(e.target.value)}
+				onChange={({ target: { value } }: {target: {value: string}}) => setValue(value)}
 			/>
 		</FormField>
 	);

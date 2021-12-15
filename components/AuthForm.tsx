@@ -5,23 +5,24 @@ import { Form, Input, Button, LinkButton, A, Err } from '../styles';
 interface FormData {
 	email: string;
 	password: string;
-	givenName: string;
-	familyName: string;
+	givenName?: string;
+	familyName?: string;
 }
 
+interface Props {
+	values: FormData;
+	handleChange: any;
+	handleSubmit: any;
+	errors: FormData;
+	signupPage?: true;
+}
 export default function AuthForm({
 	values,
 	handleChange,
 	handleSubmit,
 	errors,
 	signupPage,
-}: {
-	values: FormData;
-	handleChange: any;
-	handleSubmit: any;
-	errors: FormData;
-	signupPage: true | undefined;
-}) {
+}: Props) {
 	return (
 		<Form onSubmit={handleSubmit}>
 			{signupPage && (

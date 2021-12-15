@@ -1,10 +1,21 @@
-import Iron from '@hapi/iron';
-import { NextApiRequest as Req, NextApiResponse as Res, NextPageContext as Context } from 'next';
-import { getTokenCookie, maxAge, setTokenCookie } from './auth-cookies';
+import Iron from '@hapi/iron'; 
+import type { GetServerSidePropsContext } from 'next'; 
+import { getTokenCookie, maxAge, setTokenCookie } from './auth-cookies'; 
 
-const { TOKEN_SECRET } = process.env;
+export interface Session {
+	_id: string;
+	email: string;
+	googleId: string;
+	password: null;
+	givenName: string;
+	familyName: string;
+	createdAt: number;
+	maxAge: number;
+}
 
-const setLoginSession = async (res: Res, session) => {
+const { TOKEN_SECRET }: { TOKEN_SECRET: string } = process.env;
+
+const setLoginSession = async (res, session: Session) => {
 	const createdAt = Date.now();
 	const user = { ...session, password: null };
 	const obj = { ...user, createdAt, maxAge };
@@ -15,12 +26,14 @@ const setLoginSession = async (res: Res, session) => {
 	return user;
 };
 
-const getLoginSession = async (req: Req) => {
-	const token = getTokenCookie(req);
-	
+const getLoginSession = async (req) => {
+	const token: string | undefined = getTokenCookie(req);
 	if (!token) return;
-
-	const session = await Iron.unseal(token, TOKEN_SECRET, Iron.defaults);
+	const session: Session = await Iron.unseal(
+		token,
+		TOKEN_SECRET,
+		Iron.defaults
+	);
 	const expiresAt = session.createdAt + session.maxAge * 1000;
 
 	if (Date.now() > expiresAt) {
@@ -30,7 +43,7 @@ const getLoginSession = async (req: Req) => {
 	return session;
 };
 
-const authUserServerSideProps = async (context: Context) => {
+const authUserServerSideProps = async (context: GetServerSidePropsContext) => {
 	try {
 		const user = await getLoginSession(context.req);
 		if (user) return { props: user };

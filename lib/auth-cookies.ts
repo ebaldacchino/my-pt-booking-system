@@ -1,9 +1,8 @@
 import { serialize, parse } from 'cookie';
-import { NextApiRequest as Req, NextApiResponse as Res } from 'next';
 
 const maxAge = 60 * 60 * 8;
 
-const setTokenCookie = (res: Res, token): void => {
+const setTokenCookie = (res, token): void => {
 	const now = token.createdAt || Date.now();
 	const cookie = serialize('token', token, {
 		maxAge,
@@ -17,25 +16,25 @@ const setTokenCookie = (res: Res, token): void => {
 	res.setHeader('Set-Cookie', cookie);
 };
 
-const removeTokenCookie = (res: Res): void => {
+const removeTokenCookie = (res): void => {
 	const cookie = serialize('token', '', {
-		maxAge: '-1',
+		maxAge: -1,
 		path: '/',
 	});
 
 	res.setHeader('Set-Cookie', cookie);
 };
 
-const parseCookies = (req: Req) => {
+const parseCookies = (req) => { 
 	if (req.cookies) return req.cookies;
 
-	const cookie = req.headers?.cookie;
+	const cookie = req.headers?.cookie; 
 	return parse(cookie || '');
 };
 
-const getTokenCookie = (req: Req) => {
-	const cookies = parseCookies(req);
-	return cookies['token'];
+const getTokenCookie = (req) => {
+	const cookies = parseCookies(req); 
+	return cookies.token;
 };
 
 export {

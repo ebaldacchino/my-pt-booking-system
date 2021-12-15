@@ -1,17 +1,22 @@
 import Router from 'next/router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import fetcher from '../lib/fetcher';
 import { validateLogin } from '../lib/client-form-validation';
 import AuthForm from '../components/AuthForm';
 import Layout from '../components/Layout';
 
+interface DefaultValues {
+	email: string;
+	password: string;
+}
+const defaultValues = {
+	email: '',
+	password: '',
+};
 const Login = () => {
-	const [values, setValues] = useState({
-		email: '',
-		password: '',
-	});
-	const [errors, setErrors] = useState({});
-	const handleChange = (e) => {
+	const [values, setValues] = useState<DefaultValues>(defaultValues);
+	const [errors, setErrors] = useState<DefaultValues>(defaultValues);
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setValues((prevState) => {
 			return {
@@ -20,13 +25,13 @@ const Login = () => {
 			};
 		});
 	};
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 		const formErrors = await validateLogin(values);
 		if (formErrors) return setErrors({ ...formErrors });
 		const { res, data } = await fetcher('/api/auth/login', values);
 		if (res.ok) {
-			setErrors({});
+			setErrors(defaultValues);
 			Router.push('/book');
 		} else {
 			setErrors(data);
@@ -34,7 +39,7 @@ const Login = () => {
 	};
 
 	return (
-		<Layout title='Login'>
+		<Layout title='Login Here' description='Welcome' user=''>
 			<AuthForm {...{ handleChange, handleSubmit, values, errors }} />
 		</Layout>
 	);

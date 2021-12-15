@@ -7,8 +7,9 @@ import {
 	IconContainer,
 	Error,
 } from './styles';
+import type { FormFieldProps, PasswordEyeProps } from './types';
 
-const PasswordEye = ({ type, handleShowPassword }) => (
+const PasswordEye = ({ type, handleShowPassword }: PasswordEyeProps) => (
 	<IconContainer onClick={handleShowPassword} className='icon-container'>
 		{type === 'password' ? <BsEyeSlash /> : <BsEye />}
 	</IconContainer>
@@ -23,22 +24,18 @@ const FormField = ({
 	children,
 	handleShowPassword,
 	error,
-}) => {
+}: FormFieldProps) => {
 	return (
 		<FormControl>
 			{label && <Label>{label}</Label>}
-			<FormFieldContainer error={error} value={value} transparent={transparent}>
+			<FormFieldContainer {...{ error, value, transparent }}>
 				{children}
 				{placeHolder && (
-					<PlaceHolder
-						error={error}
-						value={value}
-						transparent={transparent}
-						htmlFor={name}>
+					<PlaceHolder {...{ error, value, transparent }}>
 						{placeHolder}
 					</PlaceHolder>
 				)}
-				{name === 'password' && (
+				{name === 'password' && handleShowPassword && (
 					<PasswordEye {...{ handleShowPassword, type }} />
 				)}
 			</FormFieldContainer>

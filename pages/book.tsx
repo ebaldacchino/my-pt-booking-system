@@ -5,14 +5,14 @@ import tw from 'twin.macro';
 import useCalendar from '../components/book/Calendar/useCalendar';
 import Calendar from '../components/book/Calendar';
 import DateSection from '../components/book/DateSection';
-import { Button } from '../components/button';
+import { Button } from '../styles/button';
 import schedule from '../components/book/mockDates';
+import type { GetServerSideProps } from 'next';
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
-
-	if (redirect) return { redirect };
-	return { props: { ...props, schedule } };
+	if (redirect) return { redirect, props: {} };
+	return { props: { givenName: props?.givenName || null, schedule } };
 };
 
 const TimeSection = tw.section`bg-blue-600 text-white flex-1 w-full`;
@@ -21,7 +21,7 @@ const SlotContainer = tw.div`bg-blue-500 border-3 rounded-lg border-blue-200 fle
 const Time = tw.span`m-auto`;
 const BookButton = tw(Button)`m-auto`;
 
-const Slot = ({ time }) => {
+const Slot = ({ time }: { time: number }) => {
 	const hr = Math.floor((time - (time >= 1300 ? 1200 : 0)) / 100);
 	const endHr = hr === 12 ? 1 : hr + 1;
 	const min = time % 100;
@@ -37,20 +37,29 @@ const Slot = ({ time }) => {
 	);
 };
 
-export default function Book(props) {
+interface Props {
+	givenName: string;
+	schedule: string;
+}
+
+export default function Book(props: Props) {
 	const calendarData = useCalendar({ schedule: props.schedule });
-	const { slots, viewCalendar } = calendarData;
 	return (
-		<Layout user={props.givenName}>
+		<Layout
+			user={props.givenName}
+			title='Book here'
+			description='Number One Personal Training services'>
 			<DateSection {...calendarData} />
 			<TimeSection>
 				<TimeContainer>
-					{slots.map(({ time }, index) => {
-						return <Slot key={index} time={Number(time)} />;
-					})}
+					{calendarData.slots.map(
+						({ time }: { time: string }, index: number) => {
+							return <Slot key={index} time={Number(time)} />;
+						}
+					)}
 				</TimeContainer>
 			</TimeSection>
-			{viewCalendar && <Calendar {...calendarData} />}
+			<Calendar {...calendarData} />
 		</Layout>
 	);
 }

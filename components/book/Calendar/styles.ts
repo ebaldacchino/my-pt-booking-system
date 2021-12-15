@@ -1,5 +1,15 @@
 import tw, { styled } from 'twin.macro';
-import { unstyledButton } from '../../button';
+import { unstyledButton } from '../../../styles/button';
+
+interface DayProps {
+	children: number;
+	disabled: boolean;
+	isMuted: boolean;
+	isSameSelected: boolean;
+	isSelected: boolean;
+	isToday: boolean;
+}
+
 const Frame = styled.div`
 	width: 400px;
 	${tw`mx-auto bg-white border shadow-lg max-w-full rounded z-10 select-none`}
@@ -27,14 +37,14 @@ const Day = styled(DefaultButton)`
 		font-size: 6vw;
 	}
 	${tw`flex items-center justify-center rounded-full text-lg  focus:scale-100`}
-	${(props) => props.isToday && tw`font-bold`}
-	${(props) =>
+	${(props: DayProps) => props.isToday && tw`font-bold`}
+	${(props: DayProps) =>
 		!props.disabled && props.isSameSelected && tw`ring-2 ring-blue-500`}
-	${(props) =>
+	${(props: DayProps) =>
 		!props.disabled &&
 		!props.isSelected &&
 		tw`transition-colors duration-200 hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:text-gray-900 active:bg-gray-200 active:text-gray-900`}
-	${(props) => {
+	${(props: DayProps) => { 
 		if (!props.disabled) {
 			return props.isMuted
 				? tw`text-gray-400`
@@ -43,7 +53,7 @@ const Day = styled(DefaultButton)`
 				: tw`text-blue-500`;
 		}
 	}}
-`;
+`; 
 const ButtonContainer = tw.div`flex border-t justify-end`;
 const CancelButton = tw.button`ml-auto px-2 py-1 text-blue-500 hover:underline focus:text-blue-700 duration-200 outline-none`;
 export {
