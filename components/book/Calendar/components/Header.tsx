@@ -23,8 +23,7 @@ const CalendarHeader = (props: {
 	const disabledNextArrow: boolean = isAfter(
 		new Date(year, month - 2, 0),
 		today
-	);
-	console.log(props);
+	); 
 	return (
 		<Header>
 			<IconButton

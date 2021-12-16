@@ -1,9 +1,13 @@
 import { serialize, parse } from 'cookie';
+import type { NextApiResponse } from 'next';
+import type { ContextRequest } from './auth';
 
 const maxAge = 60 * 60 * 8;
 
-const setTokenCookie = (res, token): void => {
-	const now = token.createdAt || Date.now();
+const setTokenCookie = (res: NextApiResponse, token: string): void => {
+	const now = Date.now();
+	console.log('Does token.createdAt exist?');
+	console.log(token);
 	const cookie = serialize('token', token, {
 		maxAge,
 		expires: new Date(now + maxAge * 1000),
@@ -16,7 +20,7 @@ const setTokenCookie = (res, token): void => {
 	res.setHeader('Set-Cookie', cookie);
 };
 
-const removeTokenCookie = (res): void => {
+const removeTokenCookie = (res: NextApiResponse): void => {
 	const cookie = serialize('token', '', {
 		maxAge: -1,
 		path: '/',
@@ -25,15 +29,15 @@ const removeTokenCookie = (res): void => {
 	res.setHeader('Set-Cookie', cookie);
 };
 
-const parseCookies = (req) => { 
+const parseCookies = (req: ContextRequest) => {
 	if (req.cookies) return req.cookies;
 
-	const cookie = req.headers?.cookie; 
+	const cookie = req.headers?.cookie;
 	return parse(cookie || '');
 };
 
-const getTokenCookie = (req) => {
-	const cookies = parseCookies(req); 
+const getTokenCookie = (req: ContextRequest) => {
+	const cookies = parseCookies(req);
 	return cookies.token;
 };
 

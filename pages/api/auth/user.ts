@@ -16,7 +16,7 @@ handler.get(async (req: Req, res: Res) => {
 			res.status(200).json({ ...user, password: null });
 		}
 	} catch (error) {
-		console.error(error.message);
+		console.log(error)
 		res.status(500).end('Authentication token is invalid, please log in');
 	}
 });

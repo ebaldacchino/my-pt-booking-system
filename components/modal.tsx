@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import tw, { styled } from 'twin.macro';
 
 const ModalBackground = styled.div`
@@ -18,13 +19,11 @@ interface ModalProps {
 }
 
 const Modal = ({ children, frame, toggleModal, end, row }: ModalProps) => {
-	const handleClosingModal = (e) => {
-		const { className } = e.target;
-		if (
-			className &&
-			typeof className === 'string' &&
-			className.includes('modal-bg')
-		) {
+	const handleClosingModal = (
+		e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+	) => {
+		const { className } = e.target as Element;
+		if (typeof className === 'string' && className.includes('modal-bg')) {
 			toggleModal();
 		}
 	};
@@ -32,8 +31,8 @@ const Modal = ({ children, frame, toggleModal, end, row }: ModalProps) => {
 		<ModalBackground
 			onClick={(e) => handleClosingModal(e)}
 			className='modal-bg'
-			end={end && 'true'}>
-			{frame ? <Frame row={row}>{children}</Frame> : children}
+			{...{ end }}>
+			{frame ? <Frame {...{ row }}>{children}</Frame> : children}
 		</ModalBackground>
 	);
 };

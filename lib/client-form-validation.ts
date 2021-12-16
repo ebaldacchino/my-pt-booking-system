@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-
 const email = yup
 	.string()
 	.email('Must be a valid email address')
@@ -24,21 +23,37 @@ const loginSchema = yup.object().shape({
 	password,
 });
 
-const handleErrors = (err) =>
-	err.inner.reduce((object, error) => {
+interface YupErrors {
+	message: string;
+	inner: { path: string; message: string }[];
+}
+const handleErrors = (err: YupErrors) => {
+	return err.inner.reduce((object, error) => {
 		return { ...object, [error.path]: error.message };
 	}, {});
+};
 
-const handleValidation = async (schema, body) => {
+interface ObjectShape {
+	givenName?: string;
+	familyName?: string;
+	email: string;
+	password: string;
+}
+const handleValidation = async (
+	schema: yup.BaseSchema<ObjectShape>,
+	body: ObjectShape
+) => {
 	try {
 		await schema.validate(body, { abortEarly: false });
-	} catch (err) {
-		return handleErrors(err);
+	} catch (error: any) {
+		return handleErrors(error);
 	}
 	return null;
 };
 
-const validateSignup = (body) => handleValidation(signUpSchema, body);
-const validateLogin = (body) => handleValidation(loginSchema, body);
+const validateSignup = (body: ObjectShape) =>
+	handleValidation(signUpSchema, body);
+const validateLogin = (body: ObjectShape) =>
+	handleValidation(loginSchema, body);
 
 export { validateSignup, validateLogin };

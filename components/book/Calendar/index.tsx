@@ -22,7 +22,7 @@ const Calendar = (props: {
 	toggleCalendar: () => void;
 	viewCalendar: false | Date;
 	setViewCalendar: Function;
-}) => {
+}): JSX.Element | void => {
 	const {
 		currentMonth,
 		date,

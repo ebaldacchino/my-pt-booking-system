@@ -1,4 +1,12 @@
-export default async (url: string, body: object | void) => { 
+interface AuthHeader {
+	Authorization: string;
+}
+
+const Fetcher = async (
+	url: string,
+	body: object | void,
+	headers?: AuthHeader
+) => {
 	const res = await fetch(url, {
 		method: body ? 'post' : 'get',
 		body: body ? JSON.stringify(body) : null,
@@ -11,3 +19,5 @@ export default async (url: string, body: object | void) => {
 	const data = await res.json();
 	return { res, data };
 };
+
+export default Fetcher;

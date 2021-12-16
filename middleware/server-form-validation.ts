@@ -1,7 +1,8 @@
 import { body, validationResult } from 'express-validator';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const validate = (validations) => {
-	return async (req, res, next) => {
+	return async (req: NextApiRequest, res?: NextApiResponse) => {
 		await Promise.all(validations.map((validation) => validation.run(req)));
 
 		const errors = validationResult(req);
@@ -57,7 +58,4 @@ const validate_signup = validate([
 
 const validate_login = validate([checkEmail(), checkPassword()]);
 
-export {
-	validate_signup,
-	validate_login,
-};
+export { validate_signup, validate_login };

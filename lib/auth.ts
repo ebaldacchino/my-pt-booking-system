@@ -1,7 +1,15 @@
-import Iron from '@hapi/iron'; 
-import type { GetServerSidePropsContext } from 'next'; 
-import { getTokenCookie, maxAge, setTokenCookie } from './auth-cookies'; 
+import Iron from '@hapi/iron';
+import type { IncomingMessage } from 'http';
+import type {
+	GetServerSidePropsContext, 
+	NextApiResponse,
+} from 'next';
+import type { NextApiRequestCookies } from 'next/dist/server/api-utils';
+import { getTokenCookie, maxAge, setTokenCookie } from './auth-cookies';
 
+export type ContextRequest = IncomingMessage & {
+	cookies: NextApiRequestCookies;
+};
 export interface Session {
 	_id: string;
 	email: string;
@@ -13,9 +21,9 @@ export interface Session {
 	maxAge: number;
 }
 
-const { TOKEN_SECRET }: { TOKEN_SECRET: string } = process.env;
-
-const setLoginSession = async (res, session: Session) => {
+const { TOKEN_SECRET } = process.env;
+const setLoginSession = async (res: NextApiResponse, session: Session) => {
+	if (!TOKEN_SECRET) return;
 	const createdAt = Date.now();
 	const user = { ...session, password: null };
 	const obj = { ...user, createdAt, maxAge };
@@ -26,8 +34,9 @@ const setLoginSession = async (res, session: Session) => {
 	return user;
 };
 
-const getLoginSession = async (req) => {
-	const token: string | undefined = getTokenCookie(req);
+const getLoginSession = async (req: ContextRequest) => {
+	if (!TOKEN_SECRET) return;
+	const token: string = getTokenCookie(req);
 	if (!token) return;
 	const session: Session = await Iron.unseal(
 		token,
