@@ -35,7 +35,10 @@ const Signup = () => {
 		}
 	}; 
 	return (
-		<Layout title='Create An Account'>
+		<Layout
+			title='Create An Account' 
+			description='Signup page'
+			user={undefined}>
 			<AuthForm
 				{...{ handleChange, handleSubmit, values, errors, signupPage: true }}
 			/>

@@ -5,9 +5,7 @@ import type { ContextRequest } from './auth';
 const maxAge = 60 * 60 * 8;
 
 const setTokenCookie = (res: NextApiResponse, token: string): void => {
-	const now = Date.now();
-	console.log('Does token.createdAt exist?');
-	console.log(token);
+	const now = Date.now(); 
 	const cookie = serialize('token', token, {
 		maxAge,
 		expires: new Date(now + maxAge * 1000),

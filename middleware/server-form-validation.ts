@@ -1,9 +1,15 @@
 import { body, validationResult } from 'express-validator';
+import type { ValidationChain } from 'express-validator';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const validate = (validations) => {
+const validate = (validations: ValidationChain[]) => {
 	return async (req: NextApiRequest, res?: NextApiResponse) => {
-		await Promise.all(validations.map((validation) => validation.run(req)));
+		// does this do anything?
+		await Promise.all(
+			validations.map((validation) => {
+				return validation.run(req);
+			})
+		);
 
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
@@ -15,7 +21,7 @@ const validate = (validations) => {
 	};
 };
 
-const checkName = (name, title) =>
+const checkName = (name: string, title: string) =>
 	body(name)
 		.trim()
 		.notEmpty()

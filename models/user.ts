@@ -1,12 +1,16 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
-const prop = (type, required, unique) => ({
+const prop = (
+	type: StringConstructor = String,
+	required: boolean = false,
+	unique: boolean = false
+) => ({
 	type,
 	required,
 	unique,
 });
 
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
 	email: prop(String, true, true),
 	googleId: String,
 	facebookId: String,

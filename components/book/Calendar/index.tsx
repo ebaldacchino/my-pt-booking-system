@@ -3,7 +3,7 @@ import { Body, Day, ButtonContainer, Frame } from './styles';
 import DaysOfWeek from './components/DaysOfWeek';
 import { isSameDay } from 'date-fns';
 import Modal from '../../modal';
-import { Button } from '../../../styles/button';
+import { Button, Variant } from '../../../styles/button';
 
 const Calendar = (props: {
 	currentMonth: number;
@@ -22,7 +22,7 @@ const Calendar = (props: {
 	toggleCalendar: () => void;
 	viewCalendar: false | Date;
 	setViewCalendar: Function;
-}): JSX.Element | void => {
+}): JSX.Element | null => {
 	const {
 		currentMonth,
 		date,
@@ -86,7 +86,7 @@ const Calendar = (props: {
 							})}
 					</Body>
 					<ButtonContainer>
-						<Button textOnly onClick={toggleCalendar}>
+						<Button variant={Variant.textOnly} onClick={toggleCalendar}>
 							Cancel
 						</Button>
 					</ButtonContainer>

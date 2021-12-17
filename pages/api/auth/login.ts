@@ -27,8 +27,11 @@ handler.post(async (req: Req, res: Res) => {
 
 		res.status(201).json({ msg: 'Logged in successfully' });
 	} catch (err) {
-		res.status(401).json(JSON.parse(err.message));
+		if (err instanceof Error) {
+			res.status(401).json(JSON.parse(err.message));
+		}
 	}
+	res.status(500);
 });
 
 export default connectDB(handler);

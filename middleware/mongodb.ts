@@ -1,18 +1,22 @@
 import mongoose from 'mongoose';
-
-const connectDB = (handler) => async (req, res) => {
+import type { NextApiRequest as Req, NextApiResponse as Res } from 'next';
+const connectDB = (handler) => async (req: Req, res: Res) => {
 	if (mongoose.connections[0].readyState) {
 		console.log('Database already connected');
 		return handler(req, res);
 	}
 
-	await mongoose
-		.connect(process.env.MONGO_URI, {
-			useUnifiedTopology: true,
-			useNewUrlParser: true,
-		})
-		.then(() => console.log('Database connected successfully'))
-		.catch((err) => console.log(err));
+	if (typeof process.env.MONGO_URI === 'string') {
+		await mongoose
+			.connect(process.env.MONGO_URI, {
+				useUnifiedTopology: true,
+				useNewUrlParser: true,
+			})
+			.then(() => console.log('Database connected successfully'))
+			.catch((err) => console.log(err));
+	} else {
+		console.log('Database string is undefined');
+	}
 
 	return handler(req, res);
 };

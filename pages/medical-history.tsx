@@ -84,7 +84,7 @@ export default function MedicalHistory() {
 		<Layout
 			user=''
 			title='Medical History'
-			description="Please reveal all the embarassing info you don't want anybody to see">
+			description="Please reveal all the embarrassing info you don't want anybody to see">
 			<Form onSubmit={handleSubmit}>
 				{currentCondition !== -1 && (
 					<BackButtonContainer>

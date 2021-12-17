@@ -8,8 +8,8 @@ import { setLoginSession } from '../../../lib/auth';
 const handler = nextConnect();
 
 handler.post(async (req: Req, res: Res) => {
-	try {
-		const errors = await validate_signup(req);
+	try { 
+		const errors = await validate_signup(req); 
 		if (errors) return res.status(404).json(errors);
 
 		const user = await createUser(req.body);

@@ -5,7 +5,7 @@ import tw from 'twin.macro';
 import useCalendar from '../components/book/Calendar/useCalendar';
 import Calendar from '../components/book/Calendar';
 import DateSection from '../components/book/DateSection';
-import { Button } from '../styles/button';
+import { Button, Variant } from '../styles/button';
 import schedule from '../components/book/mockDates';
 import type { GetServerSideProps } from 'next';
 
@@ -32,7 +32,7 @@ const Slot = ({ time }: { time: number }) => {
 				{hr}:{formattedMin} - {endHr}:{formattedMin}{' '}
 				{time < 1100 || time >= 2300 ? 'AM' : 'PM'}
 			</Time>
-			<BookButton secondary>Book Today</BookButton>
+			<BookButton variant={Variant.secondary}>Book Today</BookButton>
 		</SlotContainer>
 	);
 };
