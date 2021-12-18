@@ -56,7 +56,7 @@ const handleCustomButtonStyles = ({
 
 const handleNotTextOnly = ({ variant = Variant.primary }: ButtonStyleProps) =>
 	variant !== Variant.textOnly &&
-	tw`focus:scale-99 focus:hover:shadow-sm active:shadow-md`;
+	tw`focus:scale-[0.99] focus:hover:shadow-sm active:shadow-md`;
 
 const buttonStyles = () => [
 	defaultButtonStyles,

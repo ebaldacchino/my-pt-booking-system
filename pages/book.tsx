@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const TimeSection = tw.section`bg-blue-600 text-white flex-1 w-full`;
 const TimeContainer = tw.div`grid sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mb-auto px-4 p-4`;
-const SlotContainer = tw.div`bg-blue-500 border-3 rounded-lg border-blue-200 flex flex-wrap gap-4 w-full justify-between items-center p-4`;
+const SlotContainer = tw.div`bg-blue-500 border-[3px] rounded-lg border-blue-200 flex flex-wrap gap-4 w-full justify-between items-center p-4`;
 const Time = tw.span`m-auto`;
 const BookButton = tw(Button)`m-auto`;
 

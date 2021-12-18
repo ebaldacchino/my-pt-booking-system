@@ -4,20 +4,20 @@ import tw, { styled } from 'twin.macro';
 import { BiCalendarAlt } from 'react-icons/bi';
 import { ListContainer, ListItem, ListItemButton } from '../list-group';
 import { format, addDays, isSameDay, differenceInCalendarDays } from 'date-fns';
-import scheduleData from './mockDates';
+// import scheduleData from './mockDates';
 
 const DateSectionContainer = tw(ListContainer)`w-full flex`;
 const DatesList = styled(ListContainer)`
 	touch-action: none;
 	${tw`flex-1 flex overflow-hidden border-none`}
 	${(props: { active: string }) =>
-		props.active ? tw`cursor-grabbing` : tw`cursor-pointer`}
+		props.active ? tw`cursor-[grabbing]` : tw`cursor-pointer`}
 `;
 
 const DateListItem = tw(
 	ListItem
-)`min-w-1/3 sm:min-w-1/5 md:min-w-1/7 lg:min-w-1/11 select-none`;
-const CalendarButton = tw(ListItemButton)`w-1/4 sm:w-1/6 md:w-1/8 lg:w-1/12`;
+)`min-w-[33.33%] sm:min-w-[20%] md:min-w-[14.28%] lg:min-w-[9.09%] select-none`;
+const CalendarButton = tw(ListItemButton)`w-1/4 sm:w-1/6 md:w-[12.5%] lg:w-1/12`;
 
 const DateSection = (props: any) => {
 	const {
