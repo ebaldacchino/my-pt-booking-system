@@ -110,8 +110,7 @@ export default function MedicalHistory() {
 	const handleSubmit = (e: React.SyntheticEvent) => {
 		// e.preventDefault();
 		console.log('submitting');
-	};
-	console.log(state)
+	}; 
 	return (
 		<Layout
 			user=''
