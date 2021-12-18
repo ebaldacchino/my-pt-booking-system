@@ -11,18 +11,18 @@ export default function Testimonials() {
 			<Title>Testimonials</Title>
 			<Text>
 				Hi. My name is Maseh Nuristani. A former world title holder in
-				kickboxing, I sought Eddy's services when I was at a low point of my
+				kickboxing, I sought Eddy&apos;s services when I was at a low point of my
 				career. Coming off a loss for the Australian title, I suffered a lot of
 				injuries and seriously considered retirement.
 			</Text>
 			<Text>
 				I stepped away from the sport and ran through a 4 month strength and conditioning program with Eddy. I came
 				back to training camp with zero injuries and significant improvements in strength,
-				speed and power. Thanks to Eddy's training, I was able to perform at a completely
+				speed and power. Thanks to Eddy&apos;s training, I was able to perform at a completely
 				different level in my next fight, winning the Commonwealth title.
 			</Text>
 			<Text>
-				I continued to use Eddy's programming throughout my career, and couldn't recommend him highly enough.
+				I continued to use Eddy&apos;s programming throughout my career, and couldn&apos;t recommend him highly enough.
 			</Text>
 		</Section>
 	);

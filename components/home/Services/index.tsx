@@ -9,10 +9,10 @@ export default function Services() {
 				<Title>Make exercise work for you</Title>
 				<Text>
 					I get really annoyed seeing how many people engage in a trainer. They
-					work their ass off, sweat day in, day out and don't see the results
-					they want. The coach gives you a workout. However, there's no
+					work their ass off, sweat day in, day out and don&apos;t see the results
+					they want. The coach gives you a workout. However, there&apos;s no
 					structure to the other 23 hours of your day. With everyone I train, I
-					don't give them a 45 minute workout, take their money and move onto
+					don&apos;t give them a 45 minute workout, take their money and move onto
 					the next one. I invest in them. I provide the lifestyle structure,
 					backed by the science they need to actually get their results, and
 					implement effective workouts that are goal oriented.
@@ -43,7 +43,7 @@ export default function Services() {
 				<Title>Testimonials</Title>
 				<Text dark>
 					Hi. My name is Maseh Nuristani. A former world title holder in
-					kickboxing, I sought Eddy's services when I was at a low point of my
+					kickboxing, I sought Eddy&apos;s services when I was at a low point of my
 					career. Coming off a loss for the Australian title, I suffered a lot
 					of injuries and seriously considered retirement.
 				</Text>
@@ -51,12 +51,12 @@ export default function Services() {
 					I stepped away from the sport and ran through a 4 month strength and
 					conditioning program with Eddy. I came back to training camp with zero
 					injuries and significant improvements in strength, speed and power.
-					Thanks to Eddy's training, I was able to perform at a completely
+					Thanks to Eddy&apos;s training, I was able to perform at a completely
 					different level in my next fight, winning the Commonwealth title.
 				</Text>
 				<Text dark>
-					I continued to use Eddy's programming throughout my career, and
-					couldn't recommend him highly enough.
+					I continued to use Eddy&apos;s programming throughout my career, and
+					couldn&apos;t recommend him highly enough.
 				</Text>
 			</Section>
 			<Section green>
