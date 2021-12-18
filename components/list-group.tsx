@@ -19,7 +19,7 @@ interface ListItemButtonProps extends StylesProps {
 	dontFill?: boolean;
 }
 
-const ListContainer = styled.ul`
+const ListContainer = styled.div`
 	${tw`flex`}
 	${(props: ListContainerProps) =>
 		props.noBorder
@@ -27,7 +27,7 @@ const ListContainer = styled.ul`
 			: tw`divide-gray-200 border-t border-b border-gray-200`}
 	${({ column }: ListContainerProps) => (column ? tw`divide-y` : tw`divide-x`)}
 `;
-const ListItem = tw.li`flex flex-1`;
+const ListItem = tw.div`flex flex-1`;
 
 const ListItemButton: StyledComponent<
 	ClassAttributes<HTMLButtonElement> &

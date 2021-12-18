@@ -37,17 +37,17 @@ const DateSection = (props: any) => {
 	const [isDown, setIsDown] = useState(false);
 	const [startX, setStartX] = useState(0);
 	const [startScrollLeft, setStartScrollLeft] = useState(0);
-	const sliderEl = useRef<HTMLUListElement>(null);
+	const sliderEl = useRef<HTMLDivElement>(null);
 
 	const daysFromToday = differenceInCalendarDays(lastDay, today);
 
-	const handlePointerLeave = (e: PointerEvent<HTMLUListElement>) => {
+	const handlePointerLeave = (e: PointerEvent<HTMLDivElement>) => {
 		setIsDown(false);
 	};
-	const handlePointerUp = (e: PointerEvent<HTMLUListElement>) => {
+	const handlePointerUp = (e: PointerEvent<HTMLDivElement>) => {
 		setIsDown(false);
 	};
-	const handlePointerDown = (e: PointerEvent<HTMLUListElement>) => {
+	const handlePointerDown = (e: PointerEvent<HTMLDivElement>) => {
 		e.preventDefault();
 		setIsDown(true);
 		setStartX(e.pageX);
@@ -55,7 +55,7 @@ const DateSection = (props: any) => {
 			setStartScrollLeft(sliderEl.current.scrollLeft);
 		}
 	};
-	const handlePointerMove = (e: PointerEvent<HTMLUListElement>) => {
+	const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
 		if (!isDown) return;
 		const walk = e.pageX - startX;
 		if (null !== sliderEl.current) {
@@ -108,7 +108,7 @@ const DateSection = (props: any) => {
 						);
 					})}
 			</DatesList>
-			<CalendarButton dontFill icon onClick={toggleCalendar}>
+			<CalendarButton dontFill icon onClick={toggleCalendar} aria-label='Open calendar button'>
 				<BiCalendarAlt />
 			</CalendarButton>
 		</DateSectionContainer>

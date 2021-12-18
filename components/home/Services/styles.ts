@@ -10,7 +10,7 @@ export const Section = styled.section`
 			? tw`bg-cyan-100 text-blue-700`
 			: props.green
 			? tw`bg-green-100 text-blue-700`
-			: tw`bg-blue-500 text-white`}
+			: tw`bg-blue-600 text-white`}
 `;
 export const Text = styled.p`
 	${tw`mb-2`}
