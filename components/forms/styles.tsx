@@ -29,16 +29,18 @@ const FormFieldContainer = styled.div`
 		}
 	}
 `;
-const formFieldStyles = `relative bg-transparent appearance-none rounded focus:outline-none px-3 h-full block w-full`;
-const Input = tw.input`${formFieldStyles}`;
-const TextArea = tw.textarea`${formFieldStyles}`;
-const PlaceHolder = styled.span`
-	${tw`block left-2 ml-px px-1 absolute transform transition duration-200 z-0 select-none pointer-events-none origin-top-left`}
-	${({ value }: PlaceHolderStyleProps) => value && placeHolderBg}
-	${({ value }: PlaceHolderStyleProps) => value && placeHolderStyles}
-	${(props: PlaceHolderStyleProps) =>
-		(props.error && props.value && tw`text-red-500`) || tw`text-gray-500`}
-`;
+const formFieldStyles = () =>
+	tw`relative bg-transparent appearance-none rounded focus:outline-none px-3 h-full block w-full`;
+const Input =
+	styled.input(formFieldStyles);
+const TextArea = styled.textarea(formFieldStyles);
+const PlaceHolder = styled.span([
+	tw`block left-2 ml-px px-1 absolute transform transition duration-200 z-0 select-none pointer-events-none origin-top-left`,
+	({ value }: PlaceHolderStyleProps) => value && placeHolderBg,
+	({ value }: PlaceHolderStyleProps) => value && placeHolderStyles,
+	(props: PlaceHolderStyleProps) =>
+		(props.error && props.value && tw`text-red-500`) || tw`text-gray-500`,
+]);
 
 const IconContainer = tw.div`flex items-center justify-center h-12 pl-2 pr-4 text-lg`;
 const Error = tw.small`text-red-500 w-full flex justify-end`;

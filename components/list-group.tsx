@@ -45,7 +45,7 @@ const ListItemButton: StyledComponent<
 		${({ disabled }: any) =>
 		disabled
 			? tw`text-gray-200 cursor-default`
-			: tw`focus:bg-gray-100 hover:bg-gray-100 active:bg-gray-200 active:shadow-inner focus:shadow-inner`}
+			: tw`hocus:bg-gray-100 active:bg-gray-200 active:shadow-inner focus:shadow-inner`}
 `;
 
 export { ListContainer, ListItem, ListItemButton };
