@@ -1,3 +1,6 @@
+import { Theme } from '@emotion/react';
+import { StyledComponent } from '@emotion/styled';
+import { DetailedHTMLProps, ElementType, HTMLAttributes } from 'react';
 import tw, { styled, css } from 'twin.macro';
 import type { PlaceHolderStyleProps } from './types';
 
@@ -9,14 +12,14 @@ const placeHolderStyles = () => css`
 
 const placeHolderBg = (props: PlaceHolderStyleProps) =>
 	props.transparent ? tw`bg-gray-50` : tw`bg-white`;
+
 const FormFieldContainer = styled.div`
-	${tw`relative flex items-center border focus-within:border-2 rounded h-12 mt-2 mb-1`}
-	${({ error }: PlaceHolderStyleProps) =>
+	${tw`relative flex items-center border focus-within:border-2 rounded h-12 mt-2 mb-1`} 
+	${({ error }) =>
 		error ? tw`border-red-500` : tw`focus-within:border-blue-500 `}
 	&:focus-within {
 		span {
-			${({ error }: PlaceHolderStyleProps) =>
-				error ? tw`text-red-500` : tw`text-blue-500`}
+			${({ error }) => (error ? tw`text-red-500` : tw`text-blue-500`)}
 			${placeHolderStyles}
 			${placeHolderBg}
 			${tw`ml-0`}
@@ -29,10 +32,10 @@ const FormFieldContainer = styled.div`
 		}
 	}
 `;
+
 const formFieldStyles = () =>
 	tw`relative bg-transparent appearance-none rounded focus:outline-none px-3 h-full block w-full`;
-const Input =
-	styled.input(formFieldStyles);
+const Input = styled.input(formFieldStyles);
 const TextArea = styled.textarea(formFieldStyles);
 const PlaceHolder = styled.span([
 	tw`block left-2 ml-px px-1 absolute transform transition duration-200 z-0 select-none pointer-events-none origin-top-left`,

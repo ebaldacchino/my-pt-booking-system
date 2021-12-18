@@ -3,7 +3,6 @@ import type { NextApiRequest as Req, NextApiResponse as Res } from 'next';
 import { NextConnect } from 'next-connect';
 const connectDB =
 	(handler: NextConnect<Req, Res>) => async (req: Req, res: Res) => {
-		console.log(handler);
 		if (mongoose.connections[0].readyState) {
 			console.log('Database already connected');
 			return handler(req, res);
