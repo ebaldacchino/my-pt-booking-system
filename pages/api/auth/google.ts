@@ -1,3 +1,5 @@
+// https://github.com/tomanagle/google-oauth-tutorial
+
 import type { NextApiRequest as Req, NextApiResponse as Res } from 'next';
 import nextConnect from 'next-connect';
 import fetcher from '../../../lib/fetcher';
@@ -11,14 +13,14 @@ import { setLoginSession } from '../../../lib/auth';
 import crypto from 'crypto';
 import connectDB from '../../../middleware/mongodb';
 
-const handler = nextConnect();
+const handler = nextConnect<Req, Res>();
 
 const { GOOGLE_CLIENT_ID: client_id, GOOGLE_CLIENT_SECRET: client_secret } =
 	process.env;
 
 const redirect_uri = 'http://localhost:3000/api/auth/google';
 
-const getTokens = async (code) => {
+const getTokens = async (code: string) => {
 	const url = 'https://oauth2.googleapis.com/token';
 	const values = {
 		code,
@@ -40,7 +42,7 @@ const getGoogleAccount = async (access_token: string, id_token: string) => {
 	try {
 		const url: string = `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`;
 		const headers: {
-			Authorization: string
+			Authorization: string;
 		} = {
 			Authorization: `Bearer ${id_token}`,
 		};
@@ -51,15 +53,30 @@ const getGoogleAccount = async (access_token: string, id_token: string) => {
 	}
 };
 
+interface GoogleData {
+	email: string;
+	given_name: string;
+	family_name: string;
+	id: string;
+}
 handler.get(async (req: Req, res: Res) => {
 	try {
+		if (typeof req.query.code !== 'string') throw Error();
+
 		const { access_token, id_token } = await getTokens(req.query.code);
 
-		const data = await getGoogleAccount(access_token, id_token);
+		const data: GoogleData | undefined = await getGoogleAccount(
+			access_token,
+			id_token
+		);
+
+		if (!data) throw Error();
 
 		const { email, given_name, family_name, id: googleId } = data;
 
-		let user = await findUser({ googleId });
+		let user;
+
+		if (typeof googleId === 'string') user = await findUser({ googleId });
 
 		if (!user) user = await findAndUpdateUser({ email }, { googleId });
 
@@ -81,5 +98,3 @@ handler.get(async (req: Req, res: Res) => {
 });
 
 export default connectDB(handler);
-
-// https://github.com/tomanagle/google-oauth-tutorial

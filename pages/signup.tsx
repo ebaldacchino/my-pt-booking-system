@@ -1,19 +1,33 @@
 import Router from 'next/router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import fetcher from '../lib/fetcher';
 import { validateSignup } from '../lib/client-form-validation';
 import AuthForm from '../components/AuthForm';
 import Layout from '../components/Layout';
 
+interface DefaultValues {
+	givenName: string;
+	familyName: string;
+	email: string;
+	password: string;
+}
+interface DefaultErrors {
+	givenName?: string;
+	familyName?: string;
+	email?: string;
+	password?: string;
+}
+const defaultValues = {
+	givenName: '',
+	familyName: '',
+	email: '',
+	password: '',
+};
+
 const Signup = () => {
-	const [values, setValues] = useState({
-		givenName: '',
-		familyName: '',
-		email: '',
-		password: '',
-	});
-	const [errors, setErrors] = useState({});
-	const handleChange = (e) => {
+	const [values, setValues] = useState<DefaultValues>(defaultValues);
+	const [errors, setErrors] = useState<DefaultErrors>({});
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setValues((prevState) => {
 			return {
@@ -22,7 +36,7 @@ const Signup = () => {
 			};
 		});
 	};
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 		const formErrors = await validateSignup(values);
 		if (formErrors) return setErrors(formErrors);
@@ -33,10 +47,10 @@ const Signup = () => {
 		} else {
 			setErrors(data);
 		}
-	}; 
+	};
 	return (
 		<Layout
-			title='Create An Account' 
+			title='Create An Account'
 			description='Signup page'
 			user={undefined}>
 			<AuthForm

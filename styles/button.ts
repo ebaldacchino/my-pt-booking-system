@@ -1,3 +1,6 @@
+import { Theme } from '@emotion/react';
+import { StyledComponent } from '@emotion/styled';
+import { ElementType } from 'react';
 import tw, { styled } from 'twin.macro';
 
 export enum Variant {
@@ -7,9 +10,25 @@ export enum Variant {
 	success = 'success',
 	textOnly = 'textOnly',
 }
+interface DefaultStylesProps {
+	theme?: Theme | undefined;
+	as?: ElementType<any> | undefined;
+}
 
-interface ButtonStyleProps {
-	variant: Variant;
+type ButtonProps = StyledComponent<
+	{
+		theme?: Theme | undefined;
+		as?: ElementType<any> | undefined; 
+	} & ButtonStyleProps,
+	React.DetailedHTMLProps<
+		React.ButtonHTMLAttributes<HTMLButtonElement>,
+		HTMLButtonElement
+	>,
+	{}
+>;
+
+interface ButtonStyleProps extends DefaultStylesProps {
+	variant?: Variant;
 }
 
 const buttonBrowserDefaults = `cursor-pointer outline-none transform duration-200 select-none`;
@@ -21,7 +40,9 @@ const unstyledButton = styled.button(buttonBrowserDefaults);
 const defaultButtonStyles = () =>
 	tw`flex text-center items-center justify-center px-3 py-1.5 border rounded cursor-pointer w-[fit-content] disabled:cursor-default ${buttonBrowserDefaults}`;
 
-const handleCustomButtonStyles = ({ variant = Variant.primary }: ButtonStyleProps) =>
+const handleCustomButtonStyles = ({
+	variant = Variant.primary,
+}: ButtonStyleProps) =>
 	variant === Variant.secondary
 		? tw`text-blue-500 bg-gray-50 hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-300 active:border-gray-300`
 		: variant === Variant.danger
@@ -42,7 +63,7 @@ const buttonStyles = () => [
 	handleCustomButtonStyles,
 	handleNotTextOnly,
 ];
-const Button = styled.button(buttonStyles);
+const Button: ButtonProps = styled.button(buttonStyles);
 const LinkButton = styled.a(buttonStyles);
 
 export {

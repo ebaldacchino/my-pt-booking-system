@@ -1,6 +1,6 @@
 import { serialize, parse } from 'cookie';
 import type { NextApiResponse } from 'next';
-import type { ContextRequest } from './auth';
+import type { ContextRequest } from './auth/types';
 
 const maxAge = 60 * 60 * 8;
 

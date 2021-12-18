@@ -4,7 +4,7 @@ interface AuthHeader {
 
 const Fetcher = async (
 	url: string,
-	body: object | void,
+	body: object | void | null,
 	headers?: AuthHeader
 ) => {
 	const res = await fetch(url, {

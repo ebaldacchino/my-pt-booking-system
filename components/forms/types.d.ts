@@ -1,30 +1,26 @@
 import type { Theme } from '@emotion/react';
+import React, { ComponentProps } from 'react';
 export interface PasswordEyeProps {
 	type: 'text' | 'password';
 	handleShowPassword: () => void;
 }
 
-export interface FormFieldProps {
+export interface FormFieldProps extends ComponentProps {
 	value: string;
 	label?: string;
 	placeHolder?: string;
-	name: string;
+	name?: string;
 	transparent?: boolean;
-	error?: string;
-	children: JSX.Element | JSX.Element[];
+	error?: string; 
 	type?: string;
-	handleShowPassword?: () => void;
+	handleShowPassword?: (e) => void;
 }
 
 export interface InputProps extends FormFieldProps {
-	onChange: () => void;
+	onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
-export interface StyleProps {
-	theme?: Theme | undefined;
-}
-
-export interface PlaceHolderStyleProps extends StyleProps {
+export interface PlaceHolderStyleProps extends ComponentProps {
 	error?: boolean;
 	value?: string;
 	transparent?: boolean;

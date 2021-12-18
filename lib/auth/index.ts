@@ -1,25 +1,10 @@
 import Iron from '@hapi/iron';
-import type { IncomingMessage } from 'http';
 import type {
 	GetServerSidePropsContext, 
 	NextApiResponse,
 } from 'next';
-import type { NextApiRequestCookies } from 'next/dist/server/api-utils';
-import { getTokenCookie, maxAge, setTokenCookie } from './auth-cookies';
-
-export type ContextRequest = IncomingMessage & {
-	cookies: NextApiRequestCookies;
-};
-export interface Session {
-	_id: string;
-	email: string;
-	googleId: string;
-	password: null;
-	givenName: string;
-	familyName: string;
-	createdAt: number;
-	maxAge: number;
-}
+import { getTokenCookie, maxAge, setTokenCookie } from '../auth-cookies';
+import type { ContextRequest, Session } from './types';
 
 const { TOKEN_SECRET } = process.env;
 const setLoginSession = async (res: NextApiResponse, session: Session) => {

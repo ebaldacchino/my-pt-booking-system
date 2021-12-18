@@ -38,8 +38,31 @@ const conditions = [
 	null,
 ];
 
+interface State {
+	arthritis?: string;
+	asthma?: string;
+	diabetes?: string;
+	dizziness?: string;
+	chestPain?: string;
+	heartProblemsDisease?: string;
+	highCholesterol?: string;
+	stroke?: string;
+	familyHistoryOfHeartDiseaseOrStroke?: string;
+	highBloodPressure?: string;
+	lowBloodPressure?: string;
+	anyOtherConditions?: string; otherConditions?: string;
+	ankleFeet?: string;
+	knees?: string;
+	hipsPelvis?: string;
+	lowerBack?: string;
+	shoulders?: string;
+	neck?: string;
+	elbows?: string;
+	wrists?: string;
+	muscularPain?: string;
+}
 export default function MedicalHistory() {
-	const [state, setState] = React.useState({ otherConditions: '' });
+	const [state, setState] = React.useState<State>({ anyOtherConditions: '' });
 	const [currentCondition, setCurrentCondition] = React.useState(-1);
 
 	const label = conditions[currentCondition] || null;
@@ -54,32 +77,41 @@ export default function MedicalHistory() {
 		.join('')
 		.replace('?', '');
 
-	const nextCondition = (value: number) =>
+	const nextCondition = (isTrue: boolean = true) => {
 		setCurrentCondition(
 			(prevCondition) =>
-				prevCondition + (currentCondition === 11 && !value ? 2 : 1)
+				prevCondition + (currentCondition === 11 && !isTrue ? 2 : 1)
 		);
+	};
 
-	const updateState = (value: number) =>
+	const updateState = (
+		e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement> | boolean
+	) => {
+		let value: string | boolean = false;
+		if (typeof e === 'boolean') {
+			value = e
+		} else if ('value' in e.target) {
+			value = e.target.value;
+		}
 		setState((prevState) => ({
 			...prevState,
-			[name || 'otherConditions']: value,
+			[name || 'anyOtherConditions']: value
 		}));
+	};
 
-	const handleClick = (value: number) => {
-		updateState(value);
-		nextCondition(value);
+	const handleClick = (
+		e: React.MouseEvent<HTMLButtonElement>,
+		isTrue: boolean
+	) => {
+		updateState(isTrue);
+		nextCondition(isTrue);
 	};
 
 	const handleSubmit = (e: React.SyntheticEvent) => {
 		// e.preventDefault();
 		console.log('submitting');
 	};
-
-	console.log(state);
-
-	React.useEffect(() => {}, []);
-
+	console.log(state)
 	return (
 		<Layout
 			user=''
@@ -114,7 +146,7 @@ export default function MedicalHistory() {
 							exercise. The information contained will be treated as
 							confidential and only revealed to relevant staff for your safety.
 						</p>
-						<Button onClick={nextCondition}>Continue</Button>
+						<Button onClick={() => nextCondition()}>Continue</Button>
 					</>
 				)}
 				{label && (
@@ -131,10 +163,10 @@ export default function MedicalHistory() {
 						)}
 						<label htmlFor={name}>{label}</label>
 						<ButtonsContainer>
-							<Button type='button' onClick={() => handleClick(false)}>
+							<Button type='button' onClick={(e) => handleClick(e, false)}>
 								No
 							</Button>
-							<Button type='button' onClick={() => handleClick(true)}>
+							<Button type='button' onClick={(e) => handleClick(e, true)}>
 								Yes
 							</Button>
 						</ButtonsContainer>
@@ -145,10 +177,14 @@ export default function MedicalHistory() {
 						<Input
 							label='Please list condition(s) here'
 							placeHolder='e.g. Pneumonia'
-							onChange={(e) => updateState(e.target.value)}
-							value={state.otherConditions}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+								updateState(e)
+							}
+							value={state.anyOtherConditions || ''}
 						/>
-						<Button onClick={nextCondition} disabled={!state.otherConditions}>
+						<Button
+							onClick={() => nextCondition(true)}
+							disabled={!state.anyOtherConditions}>
 							Next
 						</Button>
 					</>

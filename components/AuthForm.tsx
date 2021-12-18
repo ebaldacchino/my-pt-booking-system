@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Form, Input, Button, LinkButton, A, Err } from '../styles';
 
 interface FormData {
-	email: string;
-	password: string;
+	email?: string;
+	password?: string;
 	givenName?: string;
 	familyName?: string;
 }

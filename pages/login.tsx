@@ -9,13 +9,17 @@ interface DefaultValues {
 	email: string;
 	password: string;
 }
+interface DefaultErrors {
+	email?: string;
+	password?: string;
+}
 const defaultValues = {
 	email: '',
 	password: '',
 };
 const Login = () => {
 	const [values, setValues] = useState<DefaultValues>(defaultValues);
-	const [errors, setErrors] = useState<DefaultValues>(defaultValues);
+	const [errors, setErrors] = useState<DefaultErrors>({});
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setValues((prevState) => {
@@ -28,10 +32,12 @@ const Login = () => {
 	const handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 		const formErrors = await validateLogin(values);
-		if (formErrors) return setErrors({ ...formErrors });
+		if (formErrors) {
+			return setErrors(formErrors);
+		}
 		const { res, data } = await fetcher('/api/auth/login', values);
 		if (res.ok) {
-			setErrors(defaultValues);
+			setErrors({});
 			Router.push('/book');
 		} else {
 			setErrors(data);
