@@ -24,6 +24,7 @@ import schedule from '../../../components/book/mockDates';
 import type { GetServerSideProps } from 'next';
 import React from 'react';
 import { format, addMinutes, addHours } from 'date-fns';
+import fetcher from '../../../lib/fetcher';
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
 	if (redirect) return { redirect, props: {} };
@@ -57,7 +58,7 @@ export default function Book(props: Props) {
 		addMinutes(date, sessionLength * sessionsPerShift),
 		'do MMMM yy, hh:mm a'
 	);
-	const createShifts = () => {
+	const createShifts = async () => {
 		const shifts: {
 			date: Date;
 			sessions: { time: Date; sessionLength: number; clientId: null }[];
@@ -72,7 +73,12 @@ export default function Book(props: Props) {
 				clientId: null,
 			});
 		}
-		console.log(shifts);
+		try {
+			const { res, data } = await fetcher('/api/shifts', shifts);
+			console.log(data);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 	return (
 		<Layout

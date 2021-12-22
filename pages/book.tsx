@@ -7,12 +7,14 @@ import Calendar from '../components/book/Calendar';
 import DateSection from '../components/book/DateSection';
 import { Button, Variant } from '../styles/button';
 import schedule from '../components/book/mockDates';
+import fetcher from '../lib/fetcher';
 import type { GetServerSideProps } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
 	if (redirect) return { redirect, props: {} };
-	return { props: { givenName: props?.givenName || null, schedule } };
+	const { res, data } = await fetcher('http://localhost:3000/api/shifts'); 
+	return { props: { givenName: props?.givenName || null, schedule: JSON.stringify(data) } };
 };
 
 const TimeSection = tw.section`bg-blue-600 text-white flex-1 w-full`;
