@@ -1,14 +1,5 @@
 import mongoose from 'mongoose';
-
-const prop = (
-	type: StringConstructor = String,
-	required: boolean = false,
-	unique: boolean = false
-) => ({
-	type,
-	required,
-	unique,
-});
+import { prop } from './helpers';
 
 const userSchema = new mongoose.Schema({
 	email: prop(String, true, true),
