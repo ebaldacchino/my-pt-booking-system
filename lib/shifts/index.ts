@@ -15,14 +15,14 @@ const createshift = async (req: Req, res: Res) => {
 	}
 };
 
-const getShifts = async (req: Req, res: Res) => {
-	try { 
-		const shifts = await Shift.find(); 
-		if (!shifts) throw Error('Failed to get shifts'); 
-		res.status(200).json({ shifts });
+const getShifts = async () => {
+	try {
+		const shifts = await Shift.find()  
+		if (!shifts) throw Error();
+		return shifts;
 	} catch (error) {
-		console.log(error);
-		res.status(401).json({ msg: 'Unauthenticated' });
+		console.log(error)
+		return null
 	}
 };
 

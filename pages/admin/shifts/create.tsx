@@ -16,8 +16,8 @@ import { authUserServerSideProps } from '../../../lib/auth';
 // import { Title } from '../styles';
 import Layout from '../../../components/Layout';
 import tw from 'twin.macro';
-import useCalendar from '../../../components/book/Calendar/useCalendar';
-import Calendar from '../../../components/book/Calendar';
+import useCalendar from '../../../components/Calendar/useCalendar';
+import Calendar from '../../../components/Calendar';
 import DateSection from '../../../components/book/DateSection';
 import { Button, Variant } from '../../../styles/button';
 import schedule from '../../../components/book/mockDates';
@@ -43,7 +43,7 @@ export default function Book(props: Props) {
 	const [startTime, setStartTime] = React.useState('12:00');
 	const [sessionLength, setSessionLength] = React.useState(60);
 	const [sessionsPerShift, setSessionsPerShift] = React.useState(1);
-	const calendar = useCalendar({ schedule: props.schedule });
+	const calendar = useCalendar();
 	const [hr, min] = startTime.split(':');
 	const p = calendar.date;
 	const date = new Date(

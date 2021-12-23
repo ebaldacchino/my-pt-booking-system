@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { isSameDay } from 'date-fns';
+import { addYears, isSameDay } from 'date-fns';
+import type { Session, Shift, UseCalendarProps } from './types';
 const today = new Date();
 const currentMonth = today.getMonth();
 const getStartDayOfMonth = (date: Date) => {
@@ -7,19 +8,29 @@ const getStartDayOfMonth = (date: Date) => {
 	return startDate === 0 ? 7 : startDate;
 };
 
-const useCalendar = (props: any) => {
-	const schedule = JSON.parse(props.schedule).map(
-		({ date, sessions }: { date: Date; sessions: string[] }) => {
-			return {
-				date: new Date(date),
-				sessions,
-			};
-		}
+const useCalendar = (props?: UseCalendarProps) => {
+	const schedule: Shift[] =
+		(props?.schedule &&
+			typeof props.schedule === 'string' &&
+			JSON.parse(props.schedule).map(({ date, sessions }: Shift) => {
+				sessions = sessions.map((session) => {
+					return {
+						...session,
+						time: new Date(session.time),
+					};
+				});
+				return {
+					date: new Date(date),
+					sessions,
+				};
+			})) ||
+		null;
+	const [date, setDate] = useState<Date>(
+		(schedule && schedule[0]?.date) || today
 	);
-	const [date, setDate] = useState<Date>(schedule[0].date);
-	const [slots, setSlots] = useState<
-		{ clientId: string | null; time: string }[]
-	>(schedule[0].sessions);
+	const [slots, setSlots] = useState<Session[]>(
+		(schedule && schedule[0]?.sessions) || []
+	);
 	const [dateObj, setDateObj] = useState({
 		day: date.getDate(),
 		month: date.getMonth(),
@@ -28,7 +39,8 @@ const useCalendar = (props: any) => {
 	const [viewCalendar, setViewCalendar] = useState<Date | false>(false);
 	const [startDay, setStartDay] = useState<number>(getStartDayOfMonth(date));
 	const toggleCalendar = () => setViewCalendar(!viewCalendar && date);
-	const lastDay: Date = schedule[schedule.length - 1].date;
+	const lastDay: Date =
+		(schedule && schedule[schedule.length - 1].date) || addYears(today, 1);
 
 	useEffect(() => {
 		const d = viewCalendar || date;
@@ -38,7 +50,7 @@ const useCalendar = (props: any) => {
 			month: d.getMonth(),
 			year: d.getFullYear(),
 		});
-		const data = schedule.find((props: { date: Date; sessions: string[] }) =>
+		const data = schedule?.find((props: Shift) =>
 			isSameDay(props.date, date)
 		)?.sessions;
 		setSlots(data || []);

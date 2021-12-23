@@ -2,19 +2,25 @@ import { authUserServerSideProps } from '../lib/auth';
 // import { Title } from '../styles';
 import Layout from '../components/Layout';
 import tw from 'twin.macro';
-import useCalendar from '../components/book/Calendar/useCalendar';
-import Calendar from '../components/book/Calendar';
+import useCalendar from '../components/Calendar/useCalendar';
+import Calendar from '../components/Calendar';
 import DateSection from '../components/book/DateSection';
 import { Button, Variant } from '../styles/button';
-import schedule from '../components/book/mockDates';
-import fetcher from '../lib/fetcher';
 import type { GetServerSideProps } from 'next';
+import shifts from '../lib/shifts';
+import format from 'date-fns/format';
+import addMinutes from 'date-fns/addMinutes';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
 	if (redirect) return { redirect, props: {} };
-	const { res, data } = await fetcher('http://localhost:3000/api/shifts'); 
-	return { props: { givenName: props?.givenName || null, schedule: JSON.stringify(data) } };
+	const schedule = await shifts.getShifts();
+	return {
+		props: {
+			givenName: props?.givenName || null,
+			schedule: JSON.stringify(schedule) || null,
+		},
+	};
 };
 
 const TimeSection = tw.section`bg-blue-600 text-white flex-1 w-full`;
@@ -23,16 +29,21 @@ const SlotContainer = tw.div`bg-blue-500 border-[3px] rounded-lg border-blue-200
 const Time = tw.span`m-auto`;
 const BookButton = tw(Button)`m-auto`;
 
-const Slot = ({ time }: { time: number }) => {
-	const hr = Math.floor((time - (time >= 1300 ? 1200 : 0)) / 100);
-	const endHr = hr === 12 ? 1 : hr + 1;
-	const min = time % 100;
-	const formattedMin = min < 10 ? `0${min}` : min;
+const Slot = ({
+	time,
+	sessionLength,
+}: {
+	time: Date;
+	sessionLength: number;
+	key: number;
+}) => {
+	const date = new Date(time);
+	const startOfSession = format(date, 'h:mm a');
+	const endOfSession = format(addMinutes(date, sessionLength), 'h:mm a');
 	return (
 		<SlotContainer>
 			<Time>
-				{hr}:{formattedMin} - {endHr}:{formattedMin}{' '}
-				{time < 1100 || time >= 2300 ? 'AM' : 'PM'}
+				{startOfSession} - {endOfSession}
 			</Time>
 			<BookButton variant={Variant.secondary}>Book Today</BookButton>
 		</SlotContainer>
@@ -45,23 +56,22 @@ interface Props {
 }
 
 export default function Book(props: Props) {
-	const calendarData = useCalendar({ schedule: props.schedule });
+	const calendar = useCalendar({ schedule: props.schedule });
 	return (
 		<Layout
 			user={props.givenName}
 			title='Book here'
 			description='Number One Personal Training services'>
-			<DateSection {...calendarData} />
+			<DateSection {...calendar} />
 			<TimeSection>
 				<TimeContainer>
-					{calendarData.slots.map(
-						({ time }: { time: string }, index: number) => {
-							return <Slot key={index} time={Number(time)} />;
-						}
-					)}
+					{calendar.slots.map((slot, index: number) => {
+						const { time, sessionLength } = slot;
+						return <Slot key={index} {...{ time, sessionLength }} />;
+					})}
 				</TimeContainer>
 			</TimeSection>
-			<Calendar {...calendarData} />
+			<Calendar {...calendar} />
 		</Layout>
 	);
 }

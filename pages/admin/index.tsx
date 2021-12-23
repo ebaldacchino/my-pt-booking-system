@@ -19,8 +19,8 @@ import { authUserServerSideProps } from '../../lib/auth';
 // import { Title } from '../styles';
 import Layout from '../../components/Layout';
 import tw from 'twin.macro';
-import useCalendar from '../../components/book/Calendar/useCalendar';
-import Calendar from '../../components/book/Calendar';
+import useCalendar from '../../components/Calendar/useCalendar';
+import Calendar from '../../components/Calendar';
 import DateSection from '../../components/book/DateSection';
 import { Button, Variant } from '../../styles/button';
 import schedule from '../../components/book/mockDates';
@@ -70,7 +70,7 @@ export default function Book(props: Props) {
 			<TimeSection>
 				<TimeContainer>
 					{calendarData.slots.map(
-						({ time }: { time: string }, index: number) => {
+						({ time }, index: number) => {
 							return <Slot key={index} time={Number(time)} />;
 						}
 					)}

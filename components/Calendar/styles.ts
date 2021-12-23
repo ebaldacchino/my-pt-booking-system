@@ -1,5 +1,5 @@
 import tw, { styled } from 'twin.macro';
-import { unstyledButton } from '../../../styles/button';
+import { unstyledButton } from '../../styles/button';
 
 interface DayProps {
 	children: number;

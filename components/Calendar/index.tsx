@@ -1,31 +1,15 @@
 import Header from './components/Header';
 import { Body, Day, ButtonContainer, Frame } from './styles';
 import DaysOfWeek from './components/DaysOfWeek';
-import { isSameDay } from 'date-fns';
-import Modal from '../../modal';
-import { Button, Variant } from '../../../styles/button';
+import { isBefore, isSameDay, addDays } from 'date-fns';
+import Modal from '../modal';
+import { Button, Variant } from '../../styles/button';
+import type { CalendarProps } from './types';
 
-const Calendar = (props: {
-	currentMonth: number;
-	date: Date;
-	dateObj: {
-		year: number;
-		day: number;
-		month: number;
-	};
-	getDaysInMonth: Function;
-	lastDay: Date;
-	schedule: [];
-	setDate: Function;
-	startDay: number;
-	today: Date;
-	toggleCalendar: () => void;
-	viewCalendar: false | Date;
-	setViewCalendar: Function;
-}): JSX.Element | null => {
+const Calendar = (props: CalendarProps): JSX.Element | null => {
 	const {
 		currentMonth,
-		date,
+		// date,
 		dateObj,
 		getDaysInMonth,
 		lastDay,
@@ -48,6 +32,7 @@ const Calendar = (props: {
 							today,
 							viewCalendar,
 							setViewCalendar,
+							lastDay,
 						}}
 					/>
 					<Body>
@@ -59,9 +44,12 @@ const Calendar = (props: {
 								const thisDate = new Date(year, month, d);
 								const thisDatesMonth = thisDate.getMonth();
 								const daysInMonth = getDaysInMonth(year, month);
-								const hasAvailableSessions = schedule.find(({ date }) =>
-									isSameDay(date, thisDate)
-								);
+								const datesPast = isBefore(addDays(thisDate, 1), today);
+								const hasAvailableSessions = schedule
+									? schedule.find((props) => {
+											return isSameDay(props.date, thisDate);
+									  })
+									: true;
 								return (
 									<Day
 										key={index}
@@ -71,7 +59,7 @@ const Calendar = (props: {
 										isSelected={d === day && currentMonth === month}
 										isSameSelected={d === day && currentMonth !== month}
 										isMuted={d <= 0 || d > daysInMonth + 1}
-										disabled={!hasAvailableSessions}
+										disabled={datesPast || !hasAvailableSessions}
 										onClick={() => {
 											setDate(thisDate);
 											toggleCalendar();

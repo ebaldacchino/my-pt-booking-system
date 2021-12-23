@@ -3,7 +3,7 @@ import type { PointerEvent } from 'react';
 import tw, { styled } from 'twin.macro';
 import { BiCalendarAlt } from 'react-icons/bi';
 import { ListContainer, ListItem, ListItemButton } from '../list-group';
-import { format, addDays, isSameDay, differenceInCalendarDays } from 'date-fns';
+import { format, addDays, isSameDay, differenceInCalendarDays, subDays } from 'date-fns';
 // import scheduleData from './mockDates';
 
 const DateSectionContainer = tw(ListContainer)`w-full flex`;
@@ -17,29 +17,34 @@ const DatesList = styled(ListContainer)`
 const DateListItem = tw(
 	ListItem
 )`min-w-[33.33%] sm:min-w-[20%] md:min-w-[14.28%] lg:min-w-[9.09%] select-none`;
-const CalendarButton = tw(ListItemButton)`w-1/4 sm:w-1/6 md:w-[12.5%] lg:w-1/12`;
+const CalendarButton = tw(
+	ListItemButton
+)`w-1/4 sm:w-1/6 md:w-[12.5%] lg:w-1/12`;
 
 const DateSection = (props: any) => {
 	const {
-		currentMonth,
+		// currentMonth,
 		date,
-		dateObj,
-		getDaysInMonth,
+		// dateObj,
+		// getDaysInMonth,
 		lastDay,
 		schedule,
 		setDate,
-		setViewCalendar,
-		startDay,
+		// setViewCalendar,
+		// startDay,
 		today,
 		toggleCalendar,
-		viewCalendar,
+		// viewCalendar,
 	} = props;
 	const [isDown, setIsDown] = useState(false);
 	const [startX, setStartX] = useState(0);
 	const [startScrollLeft, setStartScrollLeft] = useState(0);
 	const sliderEl = useRef<HTMLDivElement>(null);
 
-	const daysFromToday = differenceInCalendarDays(lastDay, today);
+	const daysBetweenLastDayAndToday = differenceInCalendarDays(
+		lastDay,
+		subDays(today, 1)
+	) || 365;
 
 	const handlePointerLeave = (e: PointerEvent<HTMLDivElement>) => {
 		setIsDown(false);
@@ -63,13 +68,13 @@ const DateSection = (props: any) => {
 		}
 	};
 	useEffect(() => {
-		const daysFromToday = differenceInCalendarDays(date, today);
+		const selectedDateFromToday = differenceInCalendarDays(date, today);
 		if (null !== sliderEl.current) {
 			const dateButtonWidth =
-				sliderEl.current.children[0].getBoundingClientRect().width; 
-		// sliderEl.current.scrollLeft = dateButtonWidth * daysFromToday; 
+				sliderEl.current.children[0].getBoundingClientRect().width;
+			// sliderEl.current.scrollLeft = dateButtonWidth * selectedDateFromToday;
 			sliderEl.current.scrollTo({
-				left: dateButtonWidth * daysFromToday,
+				left: dateButtonWidth * selectedDateFromToday,
 				behavior: 'smooth',
 			});
 		}
@@ -83,14 +88,14 @@ const DateSection = (props: any) => {
 				onPointerLeave={handlePointerLeave}
 				onPointerUp={handlePointerUp}
 				onPointerMove={handlePointerMove}>
-				{new Array(daysFromToday)
+				{new Array(daysBetweenLastDayAndToday)
 					// add days above
 					.fill('')
 					.map((_, index) => {
 						const thisDate = addDays(new Date(), index);
-						const hasAvailableSessions = schedule.find(
+						const hasAvailableSessions = schedule?.find(
 							({ date }: { date: Date }) => isSameDay(date, thisDate)
-						);
+						) || true;
 						return (
 							<DateListItem key={index}>
 								<ListItemButton
@@ -108,7 +113,11 @@ const DateSection = (props: any) => {
 						);
 					})}
 			</DatesList>
-			<CalendarButton dontFill icon onClick={toggleCalendar} aria-label='Open calendar button'>
+			<CalendarButton
+				dontFill
+				icon
+				onClick={toggleCalendar}
+				aria-label='Open calendar button'>
 				<BiCalendarAlt />
 			</CalendarButton>
 		</DateSectionContainer>
