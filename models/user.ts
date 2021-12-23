@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
 	password: prop(String, true),
 	givenName: prop(String, true),
 	familyName: prop(String, true),
+	isAdmin: Boolean
 });
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);
