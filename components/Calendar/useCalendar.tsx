@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { addYears, isSameDay } from 'date-fns';
+import { addYears, isBefore, isSameDay } from 'date-fns';
 import type { Session, Shift, UseCalendarProps } from './types';
 const today = new Date();
 const currentMonth = today.getMonth();
@@ -12,18 +12,24 @@ const useCalendar = (props?: UseCalendarProps) => {
 	const schedule: Shift[] =
 		(props?.schedule &&
 			typeof props.schedule === 'string' &&
-			JSON.parse(props.schedule).map(({ date, sessions }: Shift) => {
-				sessions = sessions.map((session) => {
+			JSON.parse(props.schedule)
+				.map(({ date, sessions }: Shift) => {
+					sessions = sessions.map((session) => {
+						return {
+							...session,
+							time: new Date(session.time),
+						};
+					});
 					return {
-						...session,
-						time: new Date(session.time),
+						date: new Date(date),
+						sessions,
 					};
-				});
-				return {
-					date: new Date(date),
-					sessions,
-				};
-			})) ||
+				}).filter((shift: Shift) => {
+					return !isBefore(shift.date, today)
+				}) 
+				.sort((a: Shift, b: Shift) => {
+					return a.date.getTime() - b.date.getTime();
+				})) ||
 		null;
 	const [date, setDate] = useState<Date>(
 		(schedule && schedule[0]?.date) || today
@@ -40,8 +46,7 @@ const useCalendar = (props?: UseCalendarProps) => {
 	const [startDay, setStartDay] = useState<number>(getStartDayOfMonth(date));
 	const toggleCalendar = () => setViewCalendar(!viewCalendar && date);
 	const lastDay: Date =
-		(schedule && schedule[schedule.length - 1].date) || addYears(today, 1);
-
+		(schedule && schedule[schedule.length - 1].date) || addYears(today, 1); 
 	useEffect(() => {
 		const d = viewCalendar || date;
 		setStartDay(getStartDayOfMonth(d));

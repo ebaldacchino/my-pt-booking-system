@@ -93,9 +93,9 @@ const DateSection = (props: any) => {
 					.fill('')
 					.map((_, index) => {
 						const thisDate = addDays(new Date(), index);
-						const hasAvailableSessions = schedule?.find(
+						const hasAvailableSessions = schedule ? schedule.find(
 							({ date }: { date: Date }) => isSameDay(date, thisDate)
-						) || true;
+						) : true;
 						return (
 							<DateListItem key={index}>
 								<ListItemButton
