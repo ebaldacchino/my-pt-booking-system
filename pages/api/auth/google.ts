@@ -91,7 +91,7 @@ handler.get(async (req: Req, res: Res) => {
 		}
 
 		await setLoginSession(res, user._doc);
-		res.redirect(301, '/book');
+		res.redirect(301, user.isAdmin ? '/admin' : '/book');
 	} catch (err) {
 		console.log('Error : In Google auth handler catch block');
 	}
