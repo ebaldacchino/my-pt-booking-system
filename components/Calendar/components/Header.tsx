@@ -1,6 +1,6 @@
 import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 import { IconButton, Header } from '../styles';
-import { isAfter, isBefore, format, addMonths, subMonths } from 'date-fns';
+import { isBefore, format, addMonths, subMonths } from 'date-fns';
 import type { HeaderProps } from '../types';
 
 const CalendarHeader = (props: HeaderProps) => {
@@ -10,11 +10,12 @@ const CalendarHeader = (props: HeaderProps) => {
 		viewCalendar,
 		setViewCalendar,
 		lastDay,
-	} = props; 
+	} = props;
 	const disabledPrevArrow: boolean = isBefore(new Date(year, month, 0), today);
-	const disabledNextArrow: boolean = lastDay
-		? isAfter(viewCalendar, lastDay)
-		: isAfter(new Date(year, month - 2, 0), today);
+	const disabledNextArrow: boolean = !isBefore(
+		new Date(year, month + 1, -1),
+		lastDay
+	);
 	return (
 		<Header>
 			<IconButton
