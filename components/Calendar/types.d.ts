@@ -24,7 +24,7 @@ export interface CalendarProps {
 	};
 	getDaysInMonth: Function;
 	lastDay: Date;
-	schedule: Shift[] | null;
+	schedule: Session[] | null;
 	setDate: Function;
 	startDay: number;
 	today: Date;

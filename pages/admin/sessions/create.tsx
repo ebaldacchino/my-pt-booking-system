@@ -59,23 +59,20 @@ export default function Book(props: Props) {
 		'do MMMM yy, hh:mm a'
 	);
 	const createShifts = async () => {
-		const shifts: {
-			date: Date;
-			sessions: { time: Date; sessionLength: number; clientId: null }[];
-		} = {
-			date,
-			sessions: [],
-		};
+		const sessions = []
 		for (let i = 0; i < sessionsPerShift; i++) {
-			shifts.sessions.push({
+			sessions.push({
 				time: addHours(date, i),
 				sessionLength,
 				clientId: null,
 			});
 		}
 		try {
-			const { res, data } = await fetcher('/api/shifts', shifts);
-			console.log(data);
+			const { res, data } = await fetcher('/api/sessions', sessions);
+			console.log(res);
+			if (res.ok) {
+				console.log(data);
+			}
 		} catch (error) {
 			console.log(error);
 		}

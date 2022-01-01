@@ -47,7 +47,7 @@ const Calendar = (props: CalendarProps): JSX.Element | null => {
 								const datesPast = isBefore(addDays(thisDate, 1), today);
 								const hasAvailableSessions = schedule
 									? schedule.find((props) => {
-											return isSameDay(props.date, thisDate);
+											return isSameDay(props.time, thisDate);
 									  })
 									: true;
 								return (

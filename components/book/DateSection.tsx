@@ -4,6 +4,8 @@ import tw, { styled } from 'twin.macro';
 import { BiCalendarAlt } from 'react-icons/bi';
 import { ListContainer, ListItem, ListItemButton } from '../list-group';
 import { format, addDays, isSameDay, differenceInCalendarDays, subDays } from 'date-fns';
+import { Session } from '../Calendar/types';
+
 // import scheduleData from './mockDates';
 
 const DateSectionContainer = tw(ListContainer)`w-full flex`;
@@ -78,7 +80,7 @@ const DateSection = (props: any) => {
 				behavior: 'smooth',
 			});
 		}
-	}, [date]);
+	}, [date, today]);
 	return (
 		<DateSectionContainer>
 			<DatesList
@@ -94,7 +96,7 @@ const DateSection = (props: any) => {
 					.map((_, index) => {
 						const thisDate = addDays(new Date(), index);
 						const hasAvailableSessions = schedule ? schedule.find(
-							({ date }: { date: Date }) => isSameDay(date, thisDate)
+							({ time }: Session) => isSameDay(time, thisDate)
 						) : true;
 						return (
 							<DateListItem key={index}>
