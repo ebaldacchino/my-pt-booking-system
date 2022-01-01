@@ -1,11 +1,11 @@
 import React from 'react';
-import useIsomorphicLayoutEffect from './useIsomorphicLayoutEffect';
+import useLayoutEffect from './useLayoutEffect';
 const useMediaQuery = () => {
 	const [values, setValues] = React.useState({
 		isDesktop: false,
 		isMobile: false,
 	});
-	useIsomorphicLayoutEffect(() => {
+	useLayoutEffect(() => {
 		const handleResize = () => {
 			const { innerWidth: w } = window;
 			setValues({
