@@ -28,7 +28,16 @@ export const getSessions = async () => {
 
 export const updateSession = async (req: Req, res: Res) => {};
 
-export const deleteSession = async (req: Req, res: Res) => {};
+export const deleteSession = async (req: Req, res: Res) => {
+	try {
+		const { _id } = req.body;
+		const deletedSession = await Session.deleteOne({ _id });   
+		res.status(200).json({ deletedSession });
+	} catch (err) {
+		console.log(err);
+		res.status(404).json({ err });
+	}
+};
 
 const handler = {
 	createSessions,

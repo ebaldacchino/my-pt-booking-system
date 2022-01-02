@@ -8,7 +8,9 @@ const getStartDayOfMonth = (date: Date) => {
 	return startDate === 0 ? 7 : startDate;
 };
 
-const formatSchedule = (schedule: string | undefined): Session[] | null => {
+const formatSchedule = (
+	schedule: string | undefined
+): Session[] | undefined => {
 	return (
 		(
 			schedule &&
@@ -18,14 +20,14 @@ const formatSchedule = (schedule: string | undefined): Session[] | null => {
 			})
 		)?.sort((a: Session, b: Session) => {
 			return a.time.getTime() - b.time.getTime();
-		}) || null
+		}) || undefined
 	);
 };
 
 const useCalendar = (props?: UseCalendarProps) => {
-	const schedule = React.useMemo(() => {
-		return formatSchedule(props?.schedule);
-	}, [props?.schedule]);
+	const [schedule, setSchedule] = React.useState(
+		formatSchedule(props?.schedule)
+	);
 	const [date, setDate] = useState<Date>(
 		(schedule && schedule[0]?.time) || today
 	);
@@ -57,12 +59,18 @@ const useCalendar = (props?: UseCalendarProps) => {
 
 	const getDaysInMonth = (year: number, month: number) =>
 		new Date(year, month + 1, -1).getDate();
-
+	const filterSchedule = (id: string) => {
+		if (typeof schedule === 'undefined') return;
+		setSchedule((prevSchedule) => {
+			return prevSchedule?.filter((session) => session._id !== id);
+		});
+	};
 	return {
 		currentMonth,
 		date,
 		dateObj,
 		getDaysInMonth,
+		filterSchedule,
 		lastDay,
 		schedule,
 		setDate,

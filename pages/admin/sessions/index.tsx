@@ -24,11 +24,20 @@ import Calendar from '../../../components/Calendar';
 import DateSection from '../../../components/book/DateSection';
 import type { GetServerSideProps } from 'next';
 import AvailableSession from '../../../components/book/AvailableSession';
+import { getSessions } from '../../../lib/sessions';
+import { LinkButton, Variant } from '../../../styles/button';
+import Link from 'next/link';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
 	if (redirect) return { redirect, props: {} };
-	return { props: { givenName: props?.givenName || null, schedule: null } };
+	const schedule = await getSessions();
+	return {
+		props: {
+			givenName: props?.givenName || null,
+			schedule: JSON.stringify(schedule) || null,
+		},
+	};
 };
 
 const TimeSection = tw.section`bg-blue-600 text-white flex-1 w-full`;
@@ -46,18 +55,31 @@ export default function Book(props: Props) {
 			user={props.givenName}
 			title='Check bookings'
 			description='Number One Personal Training services'>
-			<DateSection {...calendar} />
+			<DateSection {...calendar} schedule={null} />
 			<TimeSection>
 				<TimeContainer>
-					{calendar.slots.map((slot, index: number) => {
-						const { time, sessionLength } = slot;
+					{!calendar.slots.length && (
+						<Link href='/admin/sessions/create' passHref>
+							<LinkButton variant={Variant.secondary}>
+								Create new sessions
+							</LinkButton>
+						</Link>
+					)}
+					{calendar.slots.map((slot) => {
+						console.log(slot);
+						const { time, sessionLength, clientId, _id } = slot;
 						return (
-							<AvailableSession key={index} {...{ time, sessionLength }} />
+							<AvailableSession
+								key={_id}
+								{...{ time, sessionLength, clientId, _id }}
+								admin
+								filterSchedule={calendar.filterSchedule}
+							/>
 						);
 					})}
 				</TimeContainer>
 			</TimeSection>
-			<Calendar {...calendar} />
+			<Calendar {...calendar} schedule={null} />
 		</Layout>
 	);
 }
