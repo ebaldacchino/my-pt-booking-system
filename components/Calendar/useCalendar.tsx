@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { addYears, isSameDay } from 'date-fns';
 import type { Session, UseCalendarProps } from './types';
 const today = new Date();
@@ -8,17 +8,24 @@ const getStartDayOfMonth = (date: Date) => {
 	return startDate === 0 ? 7 : startDate;
 };
 
-const useCalendar = (props?: UseCalendarProps) => {
-	const schedule: Session[] =
+const formatSchedule = (schedule: string | undefined): Session[] | null => {
+	return (
 		(
-			props?.schedule &&
-			typeof props.schedule === 'string' &&
-			JSON.parse(props.schedule).map((session: Session) => {
+			schedule &&
+			typeof schedule === 'string' &&
+			JSON.parse(schedule).map((session: Session) => {
 				return { ...session, time: new Date(session.time) };
 			})
-		).sort((a: Session, b: Session) => {
+		)?.sort((a: Session, b: Session) => {
 			return a.time.getTime() - b.time.getTime();
-		}) || null;
+		}) || null
+	);
+};
+
+const useCalendar = (props?: UseCalendarProps) => {
+	const schedule = React.useMemo(() => {
+		return formatSchedule(props?.schedule);
+	}, [props?.schedule]);
 	const [date, setDate] = useState<Date>(
 		(schedule && schedule[0]?.time) || today
 	);
@@ -33,7 +40,7 @@ const useCalendar = (props?: UseCalendarProps) => {
 	const toggleCalendar = () => setViewCalendar(!viewCalendar && date);
 	const lastDay: Date =
 		(schedule && schedule[schedule.length - 1].time) || addYears(today, 1);
-	useEffect(() => {
+	React.useEffect(() => {
 		const d = viewCalendar || date;
 		setStartDay(getStartDayOfMonth(d));
 		setDateObj({
@@ -41,10 +48,11 @@ const useCalendar = (props?: UseCalendarProps) => {
 			month: d.getMonth(),
 			year: d.getFullYear(),
 		});
-		const data = schedule?.filter((session) => {
-			return isSameDay(session.time, date);
-		});
-		setSlots(data || []);
+		const newSlots =
+			schedule?.filter((session) => {
+				return isSameDay(session.time, date);
+			}) || [];
+		setSlots(newSlots);
 	}, [date, viewCalendar, schedule]);
 
 	const getDaysInMonth = (year: number, month: number) =>
