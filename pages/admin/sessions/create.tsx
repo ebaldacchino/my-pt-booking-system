@@ -23,7 +23,7 @@ import { Button, Variant } from '../../../styles/button';
 import schedule from '../../../components/book/mockDates';
 import type { GetServerSideProps } from 'next';
 import React from 'react';
-import { format, addMinutes, addHours } from 'date-fns';
+import { format, addMinutes, addWeeks, addDays } from 'date-fns';
 import fetcher from '../../../lib/fetcher';
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
@@ -43,6 +43,10 @@ export default function Book(props: Props) {
 	const [startTime, setStartTime] = React.useState('12:00');
 	const [sessionLength, setSessionLength] = React.useState(60);
 	const [sessionsPerShift, setSessionsPerShift] = React.useState(1);
+	const [weeksRecurring, setWeeksRecurring] = React.useState(0);
+	const [checkboxes, setCheckboxes] = React.useState<boolean[]>(
+		new Array(6).fill(false)
+	);
 	const calendar = useCalendar();
 	const [hr, min] = startTime.split(':');
 	const p = calendar.date;
@@ -53,30 +57,35 @@ export default function Book(props: Props) {
 		Number(hr),
 		Number(min)
 	);
-	const formattedStartDate = format(date, 'do MMMM yy, hh:mm a');
+	const formattedStartDate = format(date, 'EEE do MMMM yy, hh:mm a');
 	const formattedEndDate = format(
 		addMinutes(date, sessionLength * sessionsPerShift),
-		'do MMMM yy, hh:mm a'
+		'EEE do MMMM yy, hh:mm a'
 	);
 	const createShifts = async () => {
-		const sessions = []
-		for (let i = 0; i < sessionsPerShift; i++) {
-			sessions.push({
-				time: addHours(date, i),
-				sessionLength,
-				clientId: null,
-			});
-		}
+		const sessions = [];
+		for (let wk = 0; wk < weeksRecurring + 1; wk++) {
+			for (let day = 0; day < checkboxes.length + 1; day++) {
+				if (day === 0 || checkboxes[day - 1]) {
+					for (let session = 0; session < sessionsPerShift; session++) {
+						sessions.push({
+							time: addDays(addWeeks(addMinutes(date, sessionLength * session), wk), day),
+							sessionLength,
+							clientId: null,
+						});
+					}
+				}
+			}
+		} 
 		try {
-			const { res, data } = await fetcher('/api/sessions', sessions);
-			console.log(res);
+			const { res, data } = await fetcher('/api/sessions', sessions); 
 			if (res.ok) {
 				console.log(data);
 			}
 		} catch (error) {
 			console.log(error);
 		}
-	};
+	}; 
 	return (
 		<Layout
 			user={props.givenName}
@@ -111,6 +120,35 @@ export default function Book(props: Props) {
 						min={1}
 						onChange={(e) => setSessionsPerShift(Number(e.target.value))}
 					/>
+				</Div>
+				{checkboxes.map((checkbox, i) => {
+					const day: string = format(addDays(date, i + 1), 'EEEE');
+					return (
+						<Div key={day}>
+							Repeat on:{' '}
+							<input
+								type='checkbox'
+								checked={checkbox}
+								onChange={() =>
+									setCheckboxes((prevState) => {
+										return prevState.map((b, index) => (i === index ? !b : b));
+									})
+								}
+							/>
+							{}
+							<label htmlFor={day}>{day}</label>
+						</Div>
+					);
+				})}
+				<Div>
+					Recurring for:
+					<Input
+						type='number'
+						value={weeksRecurring}
+						min={0}
+						onChange={(e) => setWeeksRecurring(Number(e.target.value))}
+					/>{' '}
+					week{weeksRecurring !== 1 && 's'}
 				</Div>
 				<Button variant={Variant.secondary} onClick={createShifts}>
 					Create Shift
