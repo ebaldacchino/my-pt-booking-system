@@ -19,18 +19,16 @@ import { authUserServerSideProps } from '../../../lib/auth';
 // import { Title } from '../styles';
 import Layout from '../../../components/Layout';
 import tw from 'twin.macro';
-import useCalendar from '../../../components/book/Calendar/useCalendar';
-import Calendar from '../../../components/book/Calendar';
+import useCalendar from '../../../components/Calendar/useCalendar';
+import Calendar from '../../../components/Calendar';
 import DateSection from '../../../components/book/DateSection';
-import { Button, Variant } from '../../../styles/button';
-import schedule from '../../../components/book/mockDates';
 import type { GetServerSideProps } from 'next';
 import AvailableSession from '../../../components/book/AvailableSession';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
 	if (redirect) return { redirect, props: {} };
-	return { props: { givenName: props?.givenName || null, schedule } };
+	return { props: { givenName: props?.givenName || null, schedule: null } };
 };
 
 const TimeSection = tw.section`bg-blue-600 text-white flex-1 w-full`;
@@ -46,7 +44,7 @@ export default function Book(props: Props) {
 	return (
 		<Layout
 			user={props.givenName}
-			title='Book here'
+			title='Check bookings'
 			description='Number One Personal Training services'>
 			<DateSection {...calendar} />
 			<TimeSection>
