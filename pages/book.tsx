@@ -40,7 +40,8 @@ export default function Book(props: Props) {
 			<TimeSection>
 				<TimeContainer>
 					{calendar.slots.map((slot, index: number) => {
-						const { time, sessionLength } = slot;
+						const { time, sessionLength, clientId } = slot;
+						if (clientId) return null;
 						return (
 							<AvailableSession key={index} {...{ time, sessionLength }} />
 						);
