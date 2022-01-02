@@ -65,8 +65,7 @@ export default function Book(props: Props) {
 							</LinkButton>
 						</Link>
 					)}
-					{calendar.slots.map((slot) => {
-						console.log(slot);
+					{calendar.slots.map((slot) => { 
 						const { time, sessionLength, clientId, _id } = slot;
 						return (
 							<AvailableSession
