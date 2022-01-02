@@ -80,7 +80,7 @@ export default function Book(props: Props) {
 	return (
 		<Layout
 			user={props.givenName}
-			title='Book here'
+			title='Show availability here'
 			description='Number One Personal Training services'>
 			<DateSection {...calendar} />
 			<TimeSection>
