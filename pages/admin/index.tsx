@@ -21,15 +21,14 @@ import Layout from '../../components/Layout';
 import tw from 'twin.macro';
 import useCalendar from '../../components/Calendar/useCalendar';
 import Calendar from '../../components/Calendar';
-import DateSection from '../../components/book/DateSection'; 
-import schedule from '../../components/book/mockDates';
+import DateSection from '../../components/book/DateSection';  
 import type { GetServerSideProps } from 'next';
 import AvailableSession from '../../components/book/AvailableSession';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
 	if (redirect) return { redirect, props: {} };
-	return { props: { givenName: props?.givenName || null, schedule } };
+	return { props: { givenName: props?.givenName || null, schedule: null } };
 };
 
 const TimeSection = tw.section`bg-blue-600 text-white flex-1 w-full`;
