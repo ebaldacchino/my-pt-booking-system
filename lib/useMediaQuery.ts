@@ -1,25 +1,38 @@
 import React from 'react';
-import useLayoutEffect from './useLayoutEffect';
-const useMediaQuery = () => {
-	const [values, setValues] = React.useState({
-		isDesktop: false,
-		isMobile: false,
-	});
-	useLayoutEffect(() => {
-		const handleResize = () => {
-			const { innerWidth: w } = window;
-			setValues({
-				isDesktop: w >= 1024,
-				isMobile: w < 640,
-			});
-		};
-		handleResize();
-		window.addEventListener('resize', handleResize);
+// import useLayoutEffect from './useLayoutEffect';
+export const isMobileQuery = '( max-width: 639px )';
+export const isDesktopQuery = '( min-width: 1024px )';
+const useMediaQuery = (query: string): boolean => {
+	const getMatches = (query: string): boolean => {
+		// Prevents SSR issues
+		if (typeof window !== 'undefined') {
+			return window.matchMedia(query).matches;
+		}
+		return false;
+	};
+
+	const [matches, setMatches] = React.useState<boolean>(getMatches(query));
+
+	function handleChange() {
+		setMatches(getMatches(query));
+	}
+
+	React.useEffect(() => {
+		const matchMedia = window.matchMedia(query);
+
+		// Triggered at the first client-side load and if query changes
+		handleChange();
+
+		// Listen matchMedia
+		matchMedia.addEventListener('change', handleChange);
+
 		return () => {
-			window.removeEventListener('resize', handleResize);
+			matchMedia.removeEventListener('change', handleChange);
 		};
-	}, []);
-	return values;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [query]);
+
+	return matches;
 };
 
 export default useMediaQuery;
