@@ -4,17 +4,22 @@ interface AuthHeader {
 
 const Fetcher = async (
 	url: string,
-	body: object | void | null,
-	headers?: AuthHeader
+	{
+		body,
+		headers,
+		method = 'GET',
+	}: {
+		body: object | void | null;
+		headers?: AuthHeader;
+		method?: 'POST' | 'GET' | 'PUT' | 'DELETE';
+	}
 ) => {
 	const res = await fetch(url, {
-		method: body ? 'post' : 'get',
+		method,
 		body: body ? JSON.stringify(body) : null,
-		headers: body
-			? {
-					'Content-Type': 'application/json',
-			  }
-			: {},
+		headers: {
+			'Content-Type': 'application/json',
+		},
 	});
 	const data = await res.json();
 	return { res, data };

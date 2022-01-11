@@ -26,12 +26,22 @@ export const getSessions = async () => {
 	}
 };
 
-export const updateSession = async (req: Req, res: Res) => {};
+export const updateSession = async (req: Req, res: Res) => {
+	const { _id } = req.body;
+
+	const user = await getLoginSession(req);
+	if (!user) throw Error();
+	const session = await Session.findOneAndUpdate(
+		{ _id },
+		{ clientId: user._id }
+	);
+	res.status(200).json({ session });
+};
 
 export const deleteSession = async (req: Req, res: Res) => {
 	try {
 		const { _id } = req.body;
-		const deletedSession = await Session.deleteOne({ _id });   
+		const deletedSession = await Session.deleteOne({ _id });
 		res.status(200).json({ deletedSession });
 	} catch (err) {
 		console.log(err);
