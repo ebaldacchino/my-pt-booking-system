@@ -27,15 +27,20 @@ export const getSessions = async () => {
 };
 
 export const updateSession = async (req: Req, res: Res) => {
-	const { _id } = req.body;
+	try {
+		const { _id } = req.body;
 
-	const user = await getLoginSession(req);
-	if (!user) throw Error();
-	const session = await Session.findOneAndUpdate(
-		{ _id },
-		{ clientId: user._id }
-	);
-	res.status(200).json({ session });
+		const user = await getLoginSession(req);
+		if (!user) throw Error();
+		const session = await Session.findOneAndUpdate(
+			{ _id },
+			{ clientId: user._id }
+		);
+		res.status(200).json({ session });
+	} catch (err) {
+		console.log(err);
+		res.status(500)
+	}
 };
 
 export const deleteSession = async (req: Req, res: Res) => {

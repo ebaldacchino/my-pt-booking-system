@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { prop } from './helpers';
 
 const sessionSchema = new mongoose.Schema({
-	clientId: prop(Number),
+	clientId: prop(String),
 	sessionLength: prop(Number, true),
 	time: prop(Date, true),
 });
