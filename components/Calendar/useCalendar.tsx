@@ -41,7 +41,8 @@ const useCalendar = (props?: UseCalendarProps) => {
 	const [startDay, setStartDay] = useState<number>(getStartDayOfMonth(date));
 	const toggleCalendar = () => setViewCalendar(!viewCalendar && date);
 	const lastDay: Date =
-		(schedule && schedule[schedule.length - 1].time) || addYears(today, 1);
+		(schedule && schedule.length && schedule[schedule.length - 1].time) ||
+		addYears(today, 1);
 	React.useEffect(() => {
 		const d = viewCalendar || date;
 		setStartDay(getStartDayOfMonth(d));
