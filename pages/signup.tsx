@@ -40,7 +40,10 @@ const Signup = () => {
 		e.preventDefault();
 		const formErrors = await validateSignup(values);
 		if (formErrors) return setErrors(formErrors);
-		const { res, data } = await fetcher('/api/auth/signup', values);
+		const { res, data } = await fetcher('/api/auth/signup', {
+			body: values,
+			method: 'POST',
+		});
 		if (res.ok) {
 			setErrors({});
 			Router.push('/book');

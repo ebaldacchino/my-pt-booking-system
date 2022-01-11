@@ -35,7 +35,10 @@ const Login = () => {
 		if (formErrors) {
 			return setErrors(formErrors);
 		}
-		const { res, data } = await fetcher('/api/auth/login', values);
+		const { res, data } = await fetcher('/api/auth/login', {
+			body: values,
+			method: 'POST',
+		});
 		if (res.ok) {
 			setErrors({});
 			Router.push('/book');

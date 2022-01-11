@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const TimeSection = tw.section`flex flex-col items-center bg-blue-600 text-white flex-1 w-full p-4`;
 const TimeSectionInnerContainer = tw.div`flex flex-col gap-2 w-full max-w-[22.5rem]`;
 const Input = tw.input`text-black rounded text-center ml-auto flex`;
-const Checkbox = tw(Input)`ml-auto`
+const Checkbox = tw(Input)`ml-auto`;
 const NumberInput = tw(Input)`pl-3.5 w-14`;
 const TimeInput = tw(Input)`pl-1.5`;
 const Div = tw.div`w-full flex items-center gap-1`;
@@ -85,7 +85,10 @@ export default function Book(props: Props) {
 			}
 		}
 		try {
-			const { res, data } = await fetcher('/api/sessions', sessions);
+			const { res, data } = await fetcher('/api/sessions', {
+				body: sessions,
+				method: 'POST',
+			});
 			if (res.ok) {
 				console.log(data);
 			}
