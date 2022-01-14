@@ -9,7 +9,7 @@ const Fetcher = async (
 		headers,
 		method = 'GET',
 	}: {
-		body: object | void | null;
+		body?: object | void | null;
 		headers?: AuthHeader;
 		method?: 'POST' | 'GET' | 'PUT' | 'DELETE';
 	}
@@ -18,6 +18,7 @@ const Fetcher = async (
 		method,
 		body: body ? JSON.stringify(body) : null,
 		headers: {
+			...{ ...headers },
 			'Content-Type': 'application/json',
 		},
 	});

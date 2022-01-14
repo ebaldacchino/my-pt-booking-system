@@ -10,13 +10,13 @@ import type { GetServerSideProps } from 'next';
 import { getSessions } from '../lib/sessions';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-	const { props, redirect } = await authUserServerSideProps(context);
+	const { props, redirect } = await authUserServerSideProps(context); 
 	if (redirect) return { redirect, props: {} };
-	const schedule = await getSessions();
+	const schedule = await getSessions(); 
 	return {
 		props: {
 			givenName: props?.givenName || null,
-			schedule: JSON.stringify(schedule) || null,
+			schedule: (schedule && JSON.stringify(schedule)) || null,
 		},
 	};
 };
@@ -42,7 +42,9 @@ export default function Book(props: Props) {
 					{calendar.slots.map((slot, index: number) => {
 						const { time, sessionLength, clientId, _id } = slot;
 						if (clientId) return null;
-						return <AvailableSession key={_id} {...{ time, sessionLength, _id }} />;
+						return (
+							<AvailableSession key={_id} {...{ time, sessionLength, _id }} />
+						);
 					})}
 				</TimeContainer>
 			</TimeSection>

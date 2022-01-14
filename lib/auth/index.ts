@@ -1,8 +1,5 @@
 import Iron from '@hapi/iron';
-import type {
-	GetServerSidePropsContext, 
-	NextApiResponse,
-} from 'next';
+import type { GetServerSidePropsContext, NextApiResponse } from 'next';
 import { getTokenCookie, maxAge, setTokenCookie } from '../auth-cookies';
 import type { ContextRequest, Session } from './types';
 
@@ -22,6 +19,7 @@ const setLoginSession = async (res: NextApiResponse, session: Session) => {
 const getLoginSession = async (req: ContextRequest) => {
 	if (!TOKEN_SECRET) return;
 	const token: string = getTokenCookie(req);
+
 	if (!token) return;
 	const session: Session = await Iron.unseal(
 		token,
@@ -39,10 +37,10 @@ const getLoginSession = async (req: ContextRequest) => {
 
 const authUserServerSideProps = async (context: GetServerSidePropsContext) => {
 	try {
-		const user = await getLoginSession(context.req);
-		if (user) return { props: user };
+		const user = await getLoginSession(context.req); 
+		if (user) return { props: user };   
 		throw Error();
-	} catch (error) {
+	} catch (error) { 
 		return {
 			redirect: {
 				destination: '/login',

@@ -39,7 +39,7 @@ export const updateSession = async (req: Req, res: Res) => {
 		res.status(200).json({ session });
 	} catch (err) {
 		console.log(err);
-		res.status(500)
+		res.status(500);
 	}
 };
 

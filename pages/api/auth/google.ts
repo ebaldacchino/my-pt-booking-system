@@ -31,7 +31,10 @@ const getTokens = async (code: string) => {
 	};
 
 	try {
-		const { data } = await fetcher(url, values);
+		const { data } = await fetcher(url, {
+			method: 'POST',
+			body: values,
+		});
 		return data;
 	} catch (err) {
 		console.log('Error : In get Google tokens catch block');
@@ -41,12 +44,12 @@ const getTokens = async (code: string) => {
 const getGoogleAccount = async (access_token: string, id_token: string) => {
 	try {
 		const url: string = `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`;
-		const headers: {
-			Authorization: string;
-		} = {
-			Authorization: `Bearer ${id_token}`,
-		};
-		const { data } = await fetcher(url, null, headers);
+
+		const { data } = await fetcher(url, {
+			headers: {
+				Authorization: `Bearer ${id_token}`,
+			},
+		});
 		return data;
 	} catch (err) {
 		console.log('Error : In get Google account catch block');
