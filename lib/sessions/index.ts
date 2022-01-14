@@ -1,6 +1,7 @@
 import type { NextApiRequest as Req, NextApiResponse as Res } from 'next';
 import { getLoginSession } from '../auth';
 import Session from '../../models/session';
+import { isBefore } from 'date-fns';
 export const createSessions = async (req: Req, res: Res) => {
 	try {
 		const loggedInSession = await getLoginSession(req);
@@ -18,8 +19,8 @@ export const createSessions = async (req: Req, res: Res) => {
 export const getSessions = async () => {
 	try {
 		const sessions = await Session.find();
-		if (!sessions) throw Error();
-		return sessions;
+		if (!sessions) throw Error(); 
+		return sessions.filter((session) => isBefore(new Date(), session.time));
 	} catch (error) {
 		console.log(error);
 		return null;

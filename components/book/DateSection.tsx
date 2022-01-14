@@ -3,7 +3,13 @@ import type { PointerEvent } from 'react';
 import tw, { styled } from 'twin.macro';
 import { BiCalendarAlt } from 'react-icons/bi';
 import { ListContainer, ListItem, ListItemButton } from '../list-group';
-import { format, addDays, isSameDay, differenceInCalendarDays, subDays } from 'date-fns';
+import {
+	format,
+	addDays,
+	isSameDay,
+	differenceInCalendarDays,
+	subDays,
+} from 'date-fns';
 import { Session } from '../Calendar/types';
 
 // import scheduleData from './mockDates';
@@ -43,11 +49,10 @@ const DateSection = (props: any) => {
 	const [startScrollLeft, setStartScrollLeft] = useState(0);
 	const sliderEl = useRef<HTMLDivElement>(null);
 
-	const daysBetweenLastDayAndToday = differenceInCalendarDays(
-		lastDay,
-		subDays(today, 1)
-	) || 365;
-
+	let daysBetweenLastDayAndToday = Math.max(
+		differenceInCalendarDays(lastDay, subDays(today, 1)),
+		14
+	); 
 	const handlePointerLeave = (e: PointerEvent<HTMLDivElement>) => {
 		setIsDown(false);
 	};
@@ -95,9 +100,9 @@ const DateSection = (props: any) => {
 					.fill('')
 					.map((_, index) => {
 						const thisDate = addDays(new Date(), index);
-						const hasAvailableSessions = schedule ? schedule.find(
-							({ time }: Session) => isSameDay(time, thisDate)
-						) : true;
+						const hasAvailableSessions = schedule
+							? schedule.find(({ time }: Session) => isSameDay(time, thisDate))
+							: true;
 						return (
 							<DateListItem key={index}>
 								<ListItemButton

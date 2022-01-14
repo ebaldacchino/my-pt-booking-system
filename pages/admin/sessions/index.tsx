@@ -31,7 +31,7 @@ import Link from 'next/link';
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { props, redirect } = await authUserServerSideProps(context);
 	if (redirect) return { redirect, props: {} };
-	const schedule = await getSessions(); 
+	const schedule = await getSessions();
 	return {
 		props: {
 			givenName: props?.givenName || null,
@@ -65,7 +65,7 @@ export default function Book(props: Props) {
 							</LinkButton>
 						</Link>
 					)}
-					{calendar.slots.map((slot) => { 
+					{calendar.slots.map((slot) => {
 						const { time, sessionLength, clientId, _id } = slot;
 						return (
 							<AvailableSession
@@ -78,7 +78,7 @@ export default function Book(props: Props) {
 					})}
 				</TimeContainer>
 			</TimeSection>
-			<Calendar {...calendar}  />
+			<Calendar {...calendar} />
 		</Layout>
 	);
 }
