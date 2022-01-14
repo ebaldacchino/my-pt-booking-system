@@ -49,6 +49,7 @@ const AvailableSession = ({
 	const AdminSession = () => {
 		return (
 			<>
+			{/* should display user's name. Then, on click, view user's profile */}
 				{clientId ?? 'Session is still empty'}
 				<BookButton
 					variant={Variant.secondary}
